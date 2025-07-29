@@ -1,0 +1,126 @@
+<%- include('partials/header', { title: 'Checkout' }) %>
+
+<style>
+  body {
+    background: url('/images/logo.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .checkout-wrapper {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.8);
+    max-width: 700px;
+    margin: 80px auto;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+
+  .checkout-wrapper h2 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #222;
+  }
+
+  .checkout-description {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #444;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .form-control, select {
+    border-radius: 10px;
+    padding: 10px 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .btn-checkout {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    background-color: #111;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-checkout:hover {
+    background-color: #333;
+  }
+
+  .total-amount {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 25px;
+    color: #111;
+  }
+</style>
+
+<div class="checkout-wrapper">
+  <h2>Complete Your Purchase</h2>
+  <p class="checkout-description">
+    You're just one step away from unlocking powerful tools to grow your digital journey.  
+    We know you'll love what you’re getting — our guides and resources have helped countless creatives and entrepreneurs thrive.
+    This checkout is fast, secure, and seamless.  
+    You’ll get immediate access to your downloads via email after purchase.
+    Let’s get started on something extraordinary.
+  </p>
+
+  <form action="/checkout/place-order" method="POST">
+    <div class="mb-3">
+      <label for="firstName" class="form-label">First Name</label>
+      <input type="text" class="form-control" id="firstName" name="firstName" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="lastName" class="form-label">Surname</label>
+      <input type="text" class="form-control" id="lastName" name="lastName" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email Address (for delivery)</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="phone" class="form-label">Phone Number (optional)</label>
+      <input type="tel" class="form-control" id="phone" name="phone">
+    </div>
+
+    <div class="mb-3">
+      <label for="referral" class="form-label">How did you hear about us?</label>
+      <select name="referral" id="referral" class="form-control" required>
+        <option value="" disabled selected>Select an option</option>
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+        <option value="Facebook">Facebook</option>
+        <option value="Google Search">Google Search</option>
+        <option value="Friend or Family">Friend or Family</option>
+        <option value="YouTube">YouTube</option>
+        <option value="WhatsApp Group">WhatsApp Group</option>
+        <option value="Our Affiliate Program">Our Affiliate Program</option>
+        <option value="Email Newsletter">Email Newsletter</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="total-amount">Total: $<%= total.toFixed(2) %></div>
+
+    <button type="submit" class="btn-checkout mt-4">Proceed to Payment</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>

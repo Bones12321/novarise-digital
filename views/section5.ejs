@@ -1,0 +1,247 @@
+<%- include('partials/header', { title: title }) %>
+
+<style>
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Outfit', sans-serif;
+    background: url('/images/logo.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #222;
+  }
+
+  nav.navbar,
+  footer.site-footer {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  main {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    border-radius: 16px;
+    max-width: 900px;
+    padding: 40px 30px;
+    margin: 40px auto;
+    width: 100%;
+    color: #333;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 900;
+    font-size: 2.8rem;
+    color: #222;
+  }
+
+  .section-subtitle {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #222;
+    border-bottom: 2px solid #2575fc;
+    padding-bottom: 8px;
+  }
+
+  p, ul {
+    color: #222;
+  }
+
+  ul {
+    list-style: disc inside;
+    margin-left: 0;
+    margin-bottom: 20px;
+  }
+
+  ul li {
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+  }
+
+  .btn-cta {
+    display: inline-block;
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 30px;
+    border: none;
+    color: white;
+    background-color: #2575fc;
+    box-shadow: 0 5px 15px rgba(37, 117, 252, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    margin-top: 10px;
+    margin-bottom: 40px;
+  }
+
+  .btn-cta:hover {
+    background-color: #1a52c4;
+    box-shadow: 0 7px 20px rgba(26, 82, 196, 0.7);
+    text-decoration: none;
+  }
+
+  .trusted-partnerships-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 40px 0 20px;
+    font-weight: 700;
+    color: #333;
+  }
+
+  .trusted-partnerships-stats div {
+    text-align: center;
+    font-size: 1.3rem;
+  }
+
+  .trusted-partnerships-summary {
+    font-style: italic;
+    text-align: center;
+    color: #444;
+    margin-top: 30px;
+    font-size: 1.1rem;
+  }
+
+  /* Navbar and footer styling */
+  nav.navbar {
+    background-color: #222;
+  }
+
+  nav.navbar .navbar-brand {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  nav.navbar .nav-link {
+    color: #ccc;
+  }
+
+  nav.navbar .nav-link:hover,
+  nav.navbar .nav-link.active {
+    color: #2575fc;
+  }
+
+  footer.site-footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ccc;
+    font-size: 0.9rem;
+    width: 100%;
+  }
+
+  /* Stronger specificity + important override for these paragraphs */
+  .partnership-category > p.emphasis-text {
+    color: #222 !important;   /* charcoal black */
+    font-weight: 700 !important;
+  }
+
+  /* Also for the trusted partnerships summary */
+  p.trusted-partnerships-summary {
+    color: #222 !important;
+    font-weight: 700 !important;
+  }
+</style>
+
+<main>
+  <h1><%= title %></h1>
+
+  <div class="partnership-category">
+    <h3 class="section-subtitle">1. Become an Affiliate</h3>
+    <p class="emphasis-text">
+      Sign up to promote our products and earn <strong>35% commission per sale</strong>. After approval, you'll get a unique referral link and a personal dashboard to track your performance and earnings in real time.
+    </p>
+    <ul>
+      <li>Unique referral dashboard</li>
+      <li>35% commission per sale</li>
+      <li>Real-time tracking of clicks and conversions</li>
+      <li>Manual or automated payouts (coming soon)</li>
+    </ul>
+    <a href="/affiliate-signup" class="btn-cta">Join as an Affiliate</a>
+  </div>
+
+  <div class="partnership-category">
+    <h3 class="section-subtitle">2. Sell Your Own Products</h3>
+    <p class="emphasis-text">
+      Register as a seller and list your own digital or physical products. Admin approval is required before your product goes live. You receive <strong>90% of the sale</strong>, and we keep a 10% commission.
+    </p>
+    <ul>
+      <li>Upload product details and images</li>
+      <li>Admin reviews and approves listings</li>
+      <li>We handle customer payments</li>
+      <li>You get 90% of each sale</li>
+    </ul>
+    <a href="/seller-signup" class="btn-cta">Become a Seller</a>
+  </div>
+
+  <div class="trusted-partnerships-stats">
+    <div>
+      <h3>2 Ways</h3>
+      <p>Earn with Us</p>
+    </div>
+    <div>
+      <h3>35%</h3>
+      <p>Affiliate Commission</p>
+    </div>
+    <div>
+      <h3>90%</h3>
+      <p>Seller Revenue Share</p>
+    </div>
+  </div>
+
+  <p class="trusted-partnerships-summary">
+    Join our trusted, transparent ecosystem and start earning on your terms. Whether you promote our products or sell your own, we support your success every step of the way.
+  </p>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-logo-container">
+      <img src="/images/logo.png" alt="Beyond 9 to 5 Logo" class="footer-logo" />
+      <p class="footer-tagline">
+        Beyond 9 to 5<br />
+        Empowering the night builders, dream chasers, and side hustlers to create something extraordinary beyond the ordinary.
+      </p>
+    </div>
+
+    <nav class="footer-navigation">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/resources">Resources</a></li>
+        <li><a href="/community">Community</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/support">Support</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/shop">Shop</a></li>
+        <li><a href="/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/terms-of-service">Terms of Service</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer-cta">
+      <h4>Join the Movement</h4>
+      <p>Ready to build something extraordinary?</p>
+      <a href="/get-started" class="btn btn-primary">Get Started</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© <%= new Date().getFullYear() %> Beyond 9 to 5. All rights reserved. Built for the night builders and dream chasers.</p>
+    <div class="footer-bottom-links">
+      <span>Always building</span>
+      <a href="/privacy-policy">Privacy</a>
+      <a href="/terms-of-service">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+
+<div class="row">
+  <div class="col-md-6">
+    <img src="<%= product.thumbnail %>" alt="<%= product.name %>" class="img-fluid rounded shadow" />
+  </div>
+  <div class="col-md-6">
+    <h2><%= product.name %></h2>
+    <p class="lead">$<%= product.price.toFixed(2) %></p>
+    <p><%= product.description %></p>
+    <button class="btn btn-primary btn-lg">Buy Now</button>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
