@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-container {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      width: 350px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 12px 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    a {
+      display: block;
+      margin-top: 15px;
+      color: #333;
+      text-decoration: none;
+    }
+    .error-msg {
+      color: #cc0000;
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    .success-msg {
+      color: #007700;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Create Account</h2>
+
+    <% if (errors && errors.length > 0) { %>
+      <ul class="error-msg">
+        <% errors.forEach(error => { %>
+          <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <% if (success_msg) { %>
+      <p class="success-msg"><%= success_msg %></p>
+    <% } %>
+
+    <form action="/auth/register" method="POST">
+      <input type="text" name="name" placeholder="Full Name" value="<%= typeof name !== 'undefined' ? name : '' %>" required autocomplete="name">
+      <input type="email" name="email" placeholder="Email" value="<%= typeof email !== 'undefined' ? email : '' %>" required autocomplete="email">
+      <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
+      <input type="password" name="password2" placeholder="Confirm Password" required autocomplete="new-password">
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <a href="/auth/login">Already have an account? Log in</a>
+  </div>
+</body>
+</html>

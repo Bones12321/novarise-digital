@@ -10,8 +10,17 @@ router.post('/', (req, res) => {
   const sitePassword = process.env.SITE_PASSWORD;
 
   if (enteredPassword === sitePassword) {
-    req.session.authenticated = true;
-    res.redirect('/');  // redirect to homepage or wherever you want
+    req.session.sitePasswordEntered = true;
+
+    if (req.user) {
+      // User is logged in, redirect to dashboard by role
+      if (req.user.role === 'admin') return res.redirect('/dashboard/admin');
+      if (req.user.role === 'seller') return res.redirect('/dashboard/seller');
+      return res.redirect('/dashboard/client');
+    } else {
+      // Not logged in, redirect to homepage or login page
+      return res.redirect('/');
+    }
   } else {
     res.render('password', { error: 'Incorrect password, please try again.' });
   }
