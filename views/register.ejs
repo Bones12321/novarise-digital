@@ -1,63 +1,107 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Register</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .form-container {
-      background: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
-      width: 350px;
-      text-align: center;
-    }
-    input {
-      width: 100%;
-      padding: 12px 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      background-color: #333;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    a {
-      display: block;
-      margin-top: 15px;
-      color: #333;
-      text-decoration: none;
-    }
-    .error-msg {
-      color: #cc0000;
-      margin-bottom: 15px;
-      text-align: left;
-    }
-    .success-msg {
-      color: #007700;
-      margin-bottom: 15px;
-    }
-  </style>
-</head>
-<body>
-  <div class="form-container">
-    <h2>Create Account</h2>
+<%- include('partials/header', { title: title, cart }) %>
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('/images/logo.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+  }
+
+  .register-container {
+    max-width: 400px;
+    margin: 80px auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    color: #fff;
+  }
+
+  h1, h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #fff;
+    font-weight: 800;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.8);
+    font-size: 1rem;
+    color: #000;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background-color: #222;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #444;
+  }
+
+  .error-msg {
+    color: #ff6b6b;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: left;
+  }
+
+  .success-msg {
+    color: #00cc44;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .register-extra {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #fff;
+  }
+
+  .register-extra a {
+    color: #ffd700;  /* gold/yellow */
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .register-extra a:hover {
+    color: #ffea70;  /* lighter gold on hover */
+  }
+</style>
+
+<main>
+  <div class="register-container">
+    <h2><%= title %></h2>
 
     <% if (errors && errors.length > 0) { %>
       <ul class="error-msg">
@@ -72,14 +116,43 @@
     <% } %>
 
     <form action="/auth/register" method="POST">
-      <input type="text" name="name" placeholder="Full Name" value="<%= typeof name !== 'undefined' ? name : '' %>" required autocomplete="name">
-      <input type="email" name="email" placeholder="Email" value="<%= typeof email !== 'undefined' ? email : '' %>" required autocomplete="email">
-      <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
-      <input type="password" name="password2" placeholder="Confirm Password" required autocomplete="new-password">
+      <input
+        type="text"
+        name="name"
+        placeholder="Full Name"
+        value="<%= typeof name !== 'undefined' ? name : '' %>"
+        required
+        autocomplete="name"
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value="<%= typeof email !== 'undefined' ? email : '' %>"
+        required
+        autocomplete="email"
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+        autocomplete="new-password"
+      />
+      <input
+        type="password"
+        name="password2"
+        placeholder="Confirm Password"
+        required
+        autocomplete="new-password"
+      />
       <button type="submit">Sign Up</button>
     </form>
 
-    <a href="/auth/login">Already have an account? Log in</a>
+    <div class="register-extra">
+      Already have an account? <a href="/auth/login">Log in</a>
+    </div>
   </div>
-</body>
-</html>
+</main>
+
+<%- include('partials/footer') %>

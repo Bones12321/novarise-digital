@@ -35,6 +35,8 @@ const sendVerificationEmail = async (email, token, name, host) => {
 // GET register page
 router.get('/register', (req, res) => {
   res.render('register', {
+    title: 'Register',
+    cart: req.session.cart || null,
     errors: [],
     name: '',
     email: '',
@@ -64,6 +66,8 @@ router.post('/register', async (req, res) => {
 
   if (errors.length > 0) {
     return res.render('register', {
+      title: 'Register',
+      cart: req.session.cart || null,
       errors,
       name,
       email,
@@ -77,6 +81,8 @@ router.post('/register', async (req, res) => {
     if (userExists) {
       errors.push({ msg: 'Email is already registered' });
       return res.render('register', {
+        title: 'Register',
+        cart: req.session.cart || null,
         errors,
         name,
         email,
@@ -112,6 +118,8 @@ router.post('/register', async (req, res) => {
     console.error(err);
     errors.push({ msg: 'Something went wrong. Please try again.' });
     res.render('register', {
+      title: 'Register',
+      cart: req.session.cart || null,
       errors,
       name,
       email,
@@ -121,7 +129,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ✅ FIXED: Email verification route with token check
+// ✅ Email verification route with token check
 router.get('/verify-email/:token', async (req, res) => {
   const { token } = req.params;
 
@@ -154,7 +162,7 @@ router.get('/verify-email/:token', async (req, res) => {
 
 // GET login page
 router.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', { title: 'Login', cart: req.session.cart || [] });
 });
 
 // POST login handle
@@ -186,7 +194,13 @@ router.get('/logout', (req, res, next) => {
 
 // GET resend verification page
 router.get('/resend-verification', (req, res) => {
-  res.render('resendVerification', { errors: [], success: null, email: '' });
+  res.render('resendVerification', { 
+    title: 'Resend Verification', 
+    cart: req.session.cart || null,
+    errors: [], 
+    success: null, 
+    email: '' 
+  });
 });
 
 // POST resend verification logic
@@ -200,6 +214,8 @@ router.post('/resend-verification', async (req, res) => {
     if (!user) {
       errors.push({ msg: 'No account found with that email.' });
       return res.render('resendVerification', {
+        title: 'Resend Verification',
+        cart: req.session.cart || null,
         errors,
         success: null,
         email
@@ -208,6 +224,8 @@ router.post('/resend-verification', async (req, res) => {
 
     if (user.verified) {
       return res.render('resendVerification', {
+        title: 'Resend Verification',
+        cart: req.session.cart || null,
         errors: [],
         success: 'Email is already verified.',
         email
@@ -226,6 +244,8 @@ router.post('/resend-verification', async (req, res) => {
     await sendVerificationEmail(user.email, verificationToken, user.name, req.headers.host);
 
     res.render('resendVerification', {
+      title: 'Resend Verification',
+      cart: req.session.cart || null,
       errors: [],
       success: 'A new verification email has been sent!',
       email
@@ -235,6 +255,8 @@ router.post('/resend-verification', async (req, res) => {
     console.error(err);
     errors.push({ msg: 'Something went wrong. Try again later.' });
     res.render('resendVerification', {
+      title: 'Resend Verification',
+      cart: req.session.cart || null,
       errors,
       success: null,
       email

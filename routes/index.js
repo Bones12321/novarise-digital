@@ -111,4 +111,20 @@ router.get('/section5', (req, res) => {
   });
 });
 
+// Route for Section 6 page (Our Story)
+router.get('/section6', (req, res) => {
+  res.render('section6', {
+    title: 'Our Story',
+    backgroundImage: '/images/logo.png',
+  });
+});
+
+// Route for Terms and Conditions page
+router.get('/terms', (req, res) => {
+  res.render('terms', {
+    title: 'Terms and Conditions',
+    backgroundImage: '/images/logo.png',
+  });
+});
+
 module.exports = router;

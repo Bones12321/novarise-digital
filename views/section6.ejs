@@ -1,0 +1,71 @@
+<%- include('partials/header', { title: title, cart }) %>
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('/images/logo.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+  }
+
+  .story-container {
+    max-width: 600px;
+    margin: 80px auto;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+    color: #fff;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  }
+
+  p {
+    margin-bottom: 20px;
+    font-size: 1.15rem;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+</style>
+
+<main>
+  <div class="story-container">
+    <h1><%= title %></h1>
+
+    <p>
+      We are two brothers bound not just by blood, but by a shared vision and relentless spirit. 
+      One of us brings years of expertise in solar energy and electricity, the other, a triple major in Health Sciences with an honours degree. 
+    </p>
+
+    <p>
+      Like many, we found ourselves caught in the endless loop of the 9 to 5 grind — working tirelessly, giving our all, yet receiving little reward. 
+      The system seemed designed to keep us chasing, but never quite reaching, our true potential.
+    </p>
+
+    <p>
+      So we made a choice: to break free. To escape the constraints and start our own system — one built on passion, freedom, and empowerment. 
+      We created NovaRise Digital to share that escape with you.
+    </p>
+
+    <p>
+      Our mission is simple — to help you step out of the cycle, unlock your fullest potential, and build a life on your own terms. 
+      Because the journey to freedom isn't just ours anymore — it's yours too.
+    </p>
+
+    <p>
+      Together, we rise beyond the limits of the conventional, and forge a new path — one fueled by knowledge, resilience, and heart.
+    </p>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

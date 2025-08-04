@@ -1,104 +1,129 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Login</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: 
-        url('/images/logo.png') no-repeat center center fixed;
-      background-size: 150px 150px; /* adjust size */
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      /* Optional overlay to soften the background image */
-      position: relative;
-    }
-    
-    /* Optional overlay so the logo doesn’t overpower the form */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(244, 244, 244, 0.85);
-      z-index: 0;
-    }
+<%- include('partials/header', { title: title, cart }) %>
 
-    .form-container {
-      background: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
-      width: 350px;
-      text-align: center;
-      position: relative;
-      z-index: 1; /* put it above the overlay */
-    }
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('/images/logo.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+  }
 
-    input {
-      width: 100%;
-      padding: 12px 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      background-color: #333;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    a {
-      display: block;
-      margin-top: 15px;
-      color: #333;
-      text-decoration: none;
-    }
-    .error-msg {
-      color: #cc0000;
-      margin-bottom: 15px;
-    }
-    .success-msg {
-      color: #007700;
-      margin-bottom: 15px;
-    }
-  </style>
-</head>
-<body>
-  <div class="form-container">
-    <h2>Login</h2>
+  .login-container {
+    max-width: 400px;
+    margin: 80px auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    color: #fff;
+  }
 
-    <% if (error_msg) { %>
-      <p class="error-msg"><%= error_msg %></p>
-    <% } %>
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #fff;
+    font-weight: 800;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.8);
+    font-size: 1rem;
+    color: #000;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background-color: #222;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #444;
+  }
+
+  .error-message {
+    color: #ff6b6b;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .login-extra {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #fff;
+  }
+
+  .login-extra p {
+    margin: 6px 0;
+  }
+
+  .login-extra a {
+    color: #ffd700;  /* gold/yellow */
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .login-extra a:hover {
+    color: #ffea70;  /* lighter gold on hover */
+  }
+</style>
+
+<main>
+  <div class="login-container">
+    <h1><%= title %></h1>
 
     <% if (error) { %>
-      <p class="error-msg"><%= error %></p>
+      <div class="error-message"><%= error %></div>
     <% } %>
 
-    <% if (success_msg) { %>
-      <p class="success-msg"><%= success_msg %></p>
-    <% } %>
+    <form method="POST" action="/auth/login">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required />
 
-    <form action="/auth/login" method="POST">
-      <input type="email" name="email" placeholder="Email" required autocomplete="username">
-      <input type="password" name="password" placeholder="Password" required autocomplete="current-password">
-      <button type="submit">Log In</button>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Login</button>
     </form>
 
-    <p style="margin-top: 20px;">
-      Didn't get a verification email? <a href="/auth/resend-verification">Resend it</a>
-    </p>
-
-    <a href="/auth/register">Don't have an account? Sign up</a>
+    <div class="login-extra">
+      <p>
+        Didn’t get your code? 
+        <a href="/auth/resend-verification">Resend verification code</a>
+      </p>
+      <p>
+        Don’t have an account? 
+        <a href="/auth/register">Register here</a>
+      </p>
+    </div>
   </div>
-</body>
-</html>
+</main>
+
+<%- include('partials/footer') %>
