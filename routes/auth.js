@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Helper function to send verification email
+// Helper: Send verification email
 const sendVerificationEmail = async (email, token, name, host) => {
   const verificationURL = `http://${host}/auth/verify-email/${token}`;
   const mailOptions = {
@@ -32,7 +32,7 @@ const sendVerificationEmail = async (email, token, name, host) => {
   await transporter.sendMail(mailOptions);
 };
 
-// GET register page
+// GET: Register
 router.get('/register', (req, res) => {
   res.render('register', {
     title: 'Register',
@@ -45,7 +45,7 @@ router.get('/register', (req, res) => {
   });
 });
 
-// POST register handle
+// POST: Register
 router.post('/register', async (req, res) => {
   const { name, email, password, password2 } = req.body;
   let errors = [];
@@ -107,8 +107,6 @@ router.post('/register', async (req, res) => {
     });
 
     await newUser.save();
-
-    // Send verification email
     await sendVerificationEmail(newUser.email, verificationToken, newUser.name, req.headers.host);
 
     req.flash('success_msg', 'Registration successful! Please check your email to verify your account.');
@@ -129,7 +127,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ✅ Email verification route with token check
+// GET: Verify email
 router.get('/verify-email/:token', async (req, res) => {
   const { token } = req.params;
 
@@ -160,30 +158,67 @@ router.get('/verify-email/:token', async (req, res) => {
   }
 });
 
-// GET login page
+// GET: Login
 router.get('/login', (req, res) => {
   res.render('login', { title: 'Login', cart: req.session.cart || [] });
 });
 
-// POST login handle
+// POST: Login
 router.post('/login', async (req, res, next) => {
-  const { email } = req.body;
+  let email = '';
+  if (req.body && typeof req.body.email === 'string') {
+    email = req.body.email.toLowerCase();
+    req.body.email = email; // update original req.body
+  }
 
-  const user = await User.findOne({ email: email.toLowerCase() });
-
-  if (user && !user.verified) {
-    req.flash('error_msg', 'Please verify your email before logging in');
+  if (!email) {
+    req.flash('error_msg', 'Email is required');
     return res.redirect('/auth/login');
   }
 
-  passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/auth/login',
-    failureFlash: true
+  try {
+    const user = await User.findOne({ email });
+    if (user && !user.verified) {
+      req.flash('error_msg', 'Please verify your email before logging in');
+      return res.redirect('/auth/login');
+    }
+  } catch (err) {
+    console.error('Login error:', err);
+    req.flash('error_msg', 'An error occurred. Please try again.');
+    return res.redirect('/auth/login');
+  }
+
+  passport.authenticate('local', (err, user, info) => {
+    console.log('📥 Login attempt for:', email);
+
+    if (err) {
+      console.error('❌ Passport error:', err);
+      return next(err);
+    }
+
+    if (!user) {
+      console.warn('⚠️ Login failed:', info?.message);
+      req.flash('error', info?.message || 'Login failed');
+      return res.redirect('/auth/login');
+    }
+
+    req.logIn(user, (err) => {
+      if (err) {
+        console.error('❌ Login session error:', err);
+        return next(err);
+      }
+
+      console.log('✅ Login success:', user.email, '| Role:', user.role);
+      if (user.role === 'admin') {
+        return res.redirect('/admin/dashboard');
+      } else {
+        return res.redirect('/dashboard');
+      }
+    });
   })(req, res, next);
 });
 
-// GET logout
+// GET: Logout
 router.get('/logout', (req, res, next) => {
   req.logout(function (err) {
     if (err) return next(err);
@@ -192,7 +227,7 @@ router.get('/logout', (req, res, next) => {
   });
 });
 
-// GET resend verification page
+// GET: Resend verification
 router.get('/resend-verification', (req, res) => {
   res.render('resendVerification', { 
     title: 'Resend Verification', 
@@ -203,13 +238,17 @@ router.get('/resend-verification', (req, res) => {
   });
 });
 
-// POST resend verification logic
+// POST: Resend verification
 router.post('/resend-verification', async (req, res) => {
-  const { email } = req.body;
+  let email = '';
+  if (req.body && typeof req.body.email === 'string') {
+    email = req.body.email.toLowerCase();
+  }
+
   let errors = [];
 
   try {
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email });
 
     if (!user) {
       errors.push({ msg: 'No account found with that email.' });
@@ -232,7 +271,6 @@ router.post('/resend-verification', async (req, res) => {
       });
     }
 
-    // Create new token + expiration
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const verificationTokenExpires = Date.now() + 24 * 60 * 60 * 1000;
 
@@ -240,7 +278,6 @@ router.post('/resend-verification', async (req, res) => {
     user.verificationTokenExpires = verificationTokenExpires;
     await user.save();
 
-    // Send verification email
     await sendVerificationEmail(user.email, verificationToken, user.name, req.headers.host);
 
     res.render('resendVerification', {

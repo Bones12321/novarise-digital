@@ -36,7 +36,7 @@
     font-weight: bold;
   }
 
-  input[type="text"],
+  input[type="email"],
   input[type="password"] {
     width: 100%;
     padding: 12px;
@@ -84,14 +84,14 @@
   }
 
   .login-extra a {
-    color: #ffd700;  /* gold/yellow */
+    color: #ffd700;
     text-decoration: none;
     font-weight: 500;
     cursor: pointer;
   }
 
   .login-extra a:hover {
-    color: #ffea70;  /* lighter gold on hover */
+    color: #ffea70;
   }
 </style>
 
@@ -104,8 +104,8 @@
     <% } %>
 
     <form method="POST" action="/auth/login">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required />
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required />
 
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required />
