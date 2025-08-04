@@ -186,27 +186,31 @@ router.get('/logout', (req, res, next) => {
 
 // GET resend verification page
 router.get('/resend-verification', (req, res) => {
-  res.render('resendVerification', { error: null, success: null });
+  res.render('resendVerification', { errors: [], success: null, email: '' });
 });
 
 // POST resend verification logic
 router.post('/resend-verification', async (req, res) => {
   const { email } = req.body;
+  let errors = [];
 
   try {
     const user = await User.findOne({ email: email.toLowerCase() });
 
     if (!user) {
+      errors.push({ msg: 'No account found with that email.' });
       return res.render('resendVerification', {
-        error: 'No account found with that email.',
-        success: null
+        errors,
+        success: null,
+        email
       });
     }
 
     if (user.verified) {
       return res.render('resendVerification', {
-        error: 'Email is already verified.',
-        success: null
+        errors: [],
+        success: 'Email is already verified.',
+        email
       });
     }
 
@@ -222,15 +226,18 @@ router.post('/resend-verification', async (req, res) => {
     await sendVerificationEmail(user.email, verificationToken, user.name, req.headers.host);
 
     res.render('resendVerification', {
+      errors: [],
       success: 'A new verification email has been sent!',
-      error: null
+      email
     });
 
   } catch (err) {
     console.error(err);
+    errors.push({ msg: 'Something went wrong. Try again later.' });
     res.render('resendVerification', {
-      error: 'Something went wrong. Try again later.',
-      success: null
+      errors,
+      success: null,
+      email
     });
   }
 });

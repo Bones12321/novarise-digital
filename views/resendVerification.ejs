@@ -1,11 +1,15 @@
 <h2>Resend Verification Email</h2>
 
-<% if (errors.length > 0) { %>
+<% if (errors && errors.length > 0) { %>
   <ul>
     <% errors.forEach(error => { %>
       <li style="color:red;"><%= error.msg %></li>
     <% }) %>
   </ul>
+<% } %>
+
+<% if (success) { %>
+  <p style="color:green;"><%= success %></p>
 <% } %>
 
 <form action="/auth/resend-verification" method="POST">
