@@ -121,23 +121,22 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Email verification route with token param
+// ✅ FIXED: Email verification route with token check
 router.get('/verify-email/:token', async (req, res) => {
   const { token } = req.params;
 
   try {
-    const user = await User.findOne({ verificationToken: token });
+    const user = await User.findOne({
+      verificationToken: token,
+      verificationTokenExpires: { $gt: Date.now() }
+    });
 
     if (!user) {
-      return res.status(400).render('errorPage', { message: 'Invalid or expired token.' });
+      return res.status(400).render('errorPage', { message: 'Invalid or expired verification link.' });
     }
 
     if (user.verified) {
       return res.status(200).render('errorPage', { message: 'Account already verified.' });
-    }
-
-    if (user.verificationTokenExpires < Date.now()) {
-      return res.status(400).render('errorPage', { message: 'Token expired. Please request a new one.' });
     }
 
     user.verified = true;
@@ -145,10 +144,11 @@ router.get('/verify-email/:token', async (req, res) => {
     user.verificationTokenExpires = undefined;
     await user.save();
 
-    res.render('successPage', { message: 'Email successfully verified!' });
+    return res.render('successPage', { message: 'Email successfully verified!' });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).render('errorPage', { message: 'Server error.' });
+    console.error('Email verification failed:', err);
+    res.status(500).render('errorPage', { message: 'Server error during verification.' });
   }
 });
 
