@@ -25,11 +25,11 @@ const UserSchema = new mongoose.Schema({
   },
   verificationToken: {
     type: String,
-    required: true,  // Every user must have a verification token initially
+    required: false,  // No longer required
   },
   verificationTokenExpires: {
     type: Date,
-    required: true,  // Expiration date for the verification token
+    required: false,  // No longer required
   },
   date: {
     type: Date,
