@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User'); // Adjust path
+const bcrypt = require('bcrypt'); // Add bcrypt
+const User = require('../models/User'); // Adjust path if needed
 
 // Show reset password form
 router.get('/:token', async (req, res) => {
@@ -16,6 +17,7 @@ router.get('/:token', async (req, res) => {
 
     res.render('reset-password', { token: req.params.token, error: null });
   } catch (err) {
+    console.error(err);
     res.send('An error occurred.');
   }
 });
@@ -34,14 +36,19 @@ router.post('/:token', async (req, res) => {
       return res.send('Password reset token is invalid or has expired.');
     }
 
-    // Replace with your password hashing logic
-    user.password = password;
+    // 🔐 Hash the new password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Save hashed password and clear the reset token
+    user.password = hashedPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
 
     res.redirect('/login');
   } catch (err) {
+    console.error(err);
     res.send('An error occurred.');
   }
 });
