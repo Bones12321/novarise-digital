@@ -69,6 +69,10 @@ app.use((req, res, next) => {
 // Password entry page - must be before passwordProtect middleware
 app.use('/password', require('./routes/password'));
 
+// NEW: Forgot and Reset Password Routes
+app.use('/forgot-password', require('./routes/forgotPassword'));
+app.use('/reset-password', require('./routes/resetPassword'));
+
 // Password protection middleware
 app.use(passwordProtect);
 

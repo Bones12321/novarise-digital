@@ -5,32 +5,49 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   email: {
     type: String,
     required: true,
     unique: true,
   },
+
   password: {
     type: String,
     required: true,
   },
+
   role: {
     type: String,
     enum: ['admin', 'client', 'seller'],
     default: 'client',
   },
+
   verified: {
     type: Boolean,
     default: false, // Users must verify their email before becoming fully registered
   },
+
   verificationToken: {
     type: String,
-    required: false,  // No longer required
+    required: false,
   },
+
   verificationTokenExpires: {
     type: Date,
-    required: false,  // No longer required
+    required: false,
   },
+
+  resetPasswordToken: {
+    type: String,
+    required: false,
+  },
+
+  resetPasswordExpires: {
+    type: Date,
+    required: false,
+  },
+
   date: {
     type: Date,
     default: Date.now,

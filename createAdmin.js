@@ -1,46 +1,44 @@
-require('dotenv').config();
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
+const User = require('./models/User'); // Adjust if needed
 
-// Import your User model (adjust path as needed)
-const User = require('./models/User');
+// 🔐 Admin credentials
+const adminData = {
+  name: 'Admin',
+  email: 'novariseteam@gmail.com',
+  password: 'Admin123!', // You can change this if needed
+  role: 'admin'
+};
+
+// 📦 Your MongoDB connection string
+const MONGO_URI = 'mongodb://localhost:27017/novariseDB'; // Change if your DB name differs
 
 async function createAdmin() {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('Connected to MongoDB');
+    await mongoose.connect(MONGO_URI);
+    console.log('🟢 Connected to MongoDB');
 
-    const email = 'novariseteam@gmail.com';
-    const plainPassword = 'Flaffie12';
-
-    // Check if admin user already exists
-    let user = await User.findOne({ email });
-    if (user) {
-      console.log('Admin user already exists.');
-      process.exit(0);
+    const existingAdmin = await User.findOne({ email: adminData.email });
+    if (existingAdmin) {
+      console.log('⚠️ Admin user already exists. Deleting and recreating...');
+      await User.deleteOne({ email: adminData.email });
     }
 
-    // Hash password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
-
-    // Create new admin user
-    user = new User({
-      name: 'Admin',
-      email: email,
+    const hashedPassword = await bcrypt.hash(adminData.password, 10);
+    const newAdmin = new User({
+      name: adminData.name,
+      email: adminData.email.toLowerCase(),
       password: hashedPassword,
-      role: 'admin',  // IMPORTANT: admin role
+      role: adminData.role
     });
 
-    await user.save();
-    console.log('Admin user created successfully!');
-    process.exit(0);
+    await newAdmin.save();
+    console.log('✅ Admin user created successfully!');
   } catch (err) {
-    console.error('Error creating admin user:', err);
-    process.exit(1);
+    console.error('❌ Error creating admin:', err);
+  } finally {
+    await mongoose.connection.close();
+    process.exit();
   }
 }
 
