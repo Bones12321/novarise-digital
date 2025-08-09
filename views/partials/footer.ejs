@@ -1,6 +1,116 @@
 <footer class="site-footer">
 
   <style>
+    /* Desktop footer layout */
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 30px;
+      padding: 40px 20px;
+    }
+
+    .footer-logo-container {
+      max-width: 300px;
+      text-align: left;
+    }
+
+    .footer-logo {
+      max-width: 180px;
+      height: auto;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .footer-tagline {
+      font-size: 1rem;
+      line-height: 1.4;
+      color: #ddd;
+      white-space: pre-line;
+    }
+
+    .footer-navigation {
+      max-width: 220px;
+    }
+
+    .footer-navigation h4 {
+      margin-bottom: 15px;
+      font-size: 1.25rem;
+      color: #fff;
+    }
+
+    .footer-navigation ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-navigation ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-navigation ul li a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer-navigation ul li a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .footer-cta {
+      max-width: 320px;
+      text-align: left;
+      color: #ddd;
+    }
+
+    .footer-cta h4 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    .footer-cta p {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+
+    .btn.btn-primary {
+      width: auto;
+      padding: 10px 30px;
+      font-weight: 600;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-top: 1px solid #444;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .footer-bottom-links a {
+      color: #aaa;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-bottom-links a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
     /* Mobile Responsive Footer */
     @media (max-width: 768px) {
       .footer-top {
@@ -13,11 +123,11 @@
 
       .footer-logo-container {
         max-width: 90%;
+        text-align: center;
       }
 
       .footer-logo {
         max-width: 150px;
-        height: auto;
         margin-bottom: 10px;
       }
 
@@ -34,15 +144,6 @@
       .footer-navigation h4 {
         margin-bottom: 10px;
         font-size: 1.1rem;
-      }
-
-      .footer-navigation ul {
-        padding: 0;
-        list-style: none;
-      }
-
-      .footer-navigation ul li {
-        margin-bottom: 8px;
       }
 
       .footer-navigation ul li a {
@@ -75,15 +176,9 @@
         padding: 15px 20px;
       }
 
-      .footer-bottom p {
-        font-size: 0.9rem;
-      }
-
       .footer-bottom-links {
-        display: flex;
         flex-direction: column;
         gap: 5px;
-        font-size: 0.9rem;
       }
 
       .footer-bottom-links a {
@@ -92,7 +187,7 @@
     }
   </style>
 
-  <div class="footer-top d-flex justify-content-between align-items-start">
+  <div class="footer-top">
     <div class="footer-logo-container">
       <img src="/images/logo.png" alt="NovaRise" class="footer-logo" />
       <p class="footer-tagline">
@@ -119,9 +214,9 @@
     </div>
   </div>
 
-  <div class="footer-bottom d-flex justify-content-between align-items-center">
+  <div class="footer-bottom">
     <p>© 2025 NovaRise. All rights reserved. Built for the night builders and dream chasers.</p>
-    <div class="footer-bottom-links d-flex gap-3 align-items-center">
+    <div class="footer-bottom-links">
       <span>Always building</span>
       <a href="/terms">Terms</a>
     </div>

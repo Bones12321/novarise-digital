@@ -145,6 +145,84 @@
       font-size: 1.5rem;
     }
   }
+
+  /* NEW LAYOUT UPDATES FOR SECTIONS 1-4 */
+
+  /* LIBERATION SECTION BOXES */
+  .liberation-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .liberation-box {
+    flex: 1 1 45%;
+    min-width: 280px;
+    box-sizing: border-box;
+  }
+  /* For three boxes: two side by side and one full width beneath */
+  .liberation-box:nth-child(3) {
+    flex-basis: 100%;
+  }
+
+  /* MIND MASTERY CARDS */
+  .mind-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .mind-card {
+    flex: 1 1 45%;
+    min-width: 280px;
+    box-sizing: border-box;
+  }
+
+  /* WELLNESS CARDS */
+  .wellness-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .wellness-card {
+    flex: 1 1 30%;
+    min-width: 280px;
+    box-sizing: border-box;
+  }
+
+  /* PERSONAL RECOMMENDATIONS */
+  .personal-recommendations-container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .recommendation-category {
+    display: inline-block;
+    vertical-align: top;
+    width: 48%;
+    min-width: 280px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    margin-right: 2%;
+  }
+  /* Fix last item margin */
+  .recommendation-category:nth-child(2n) {
+    margin-right: 0;
+  }
+  /* Make last two categories full width on smaller than 600px */
+  @media (max-width: 600px) {
+    .recommendation-category {
+      width: 100%;
+      margin-right: 0 !important;
+    }
+  }
+
+  /* Fix heading out of frame */
+  .personal-recommendations-container > h2,
+  .personal-recommendations-container > h3 {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 </style>
 
 <!-- HERO SECTION -->
