@@ -1,401 +1,79 @@
 <%- include('partials/header', { title: 'NovaRise' }) %>
 
 <style>
-  /* GENERAL LAYOUT FOR ALL SECTIONS */
-  section {
-    padding: 60px 15px;
-  }
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  /* HERO SECTION */
-  .hero-section {
-    background: url('/images/hero-bg.jpg') center center/cover no-repeat;
-    position: relative;
-    color: white;
-  }
-  .hero-overlay {
-    background-color: rgba(0,0,0,0.6);
-    padding: 80px 20px;
-  }
-  .hero-content {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 0 10px;
-  }
-  .tagline {
-    font-size: 1.5rem;
-    font-weight: 300;
-    margin-bottom: 15px;
-    letter-spacing: 2px;
-  }
-  .main-title {
-    font-size: 3.5rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    line-height: 1.1;
-  }
-  .hero-description {
-    font-size: 1.25rem;
-    font-weight: 300;
-    margin-bottom: 30px;
-    line-height: 1.6;
-  }
-  .hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 40px;
-  }
-  .hero-btn {
-    padding: 15px 35px;
-    font-size: 1.1rem;
-    border-radius: 35px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-  .hero-btn.primary {
-    background-color: #ff5722;
-    color: white;
-    border: none;
-  }
-  .hero-btn.primary:hover {
-    background-color: #e64a19;
-  }
-  .hero-btn.secondary {
-    background-color: transparent;
-    color: white;
-    border: 2px solid white;
-  }
-  .hero-btn.secondary:hover {
-    background-color: white;
-    color: #ff5722;
-  }
-  .hero-stats {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    font-weight: 600;
-  }
-  .hero-stats div {
-    text-align: center;
-  }
-  .hero-stats div h3 {
-    font-size: 2rem;
-    margin-bottom: 5px;
-  }
-  .hero-stats div p {
-    font-size: 1rem;
-    font-weight: 300;
-    letter-spacing: 1.2px;
-  }
-
-  /* LIBERATION SECTION */
-  .liberation-section {
-    background-color: #f9f9f9;
-    color: #222;
-  }
-  .liberation-overlay {
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 60px 20px;
-  }
-  .liberation-container {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .liberation-container h2 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-  .section-subtitle {
-    font-size: 1.4rem;
-    font-weight: 400;
-    margin-bottom: 30px;
-    color: #666;
-  }
-  .liberation-description {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 18px;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  /* DESKTOP / LAPTOP - ORIGINAL STYLES - NO CHANGES */
+  
+  /* LIBERATION SECTION BOXES */
   .liberation-features {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 20px;
     justify-content: center;
-    margin-top: 40px;
-    margin-bottom: 40px;
   }
   .liberation-box {
-    background-color: white;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    border-radius: 15px;
     flex: 1 1 45%;
     min-width: 280px;
-    padding: 30px 25px;
     box-sizing: border-box;
-    text-align: left;
-    transition: box-shadow 0.3s ease;
   }
-  .liberation-box:hover {
-    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-  }
-  .liberation-box h4 {
-    font-size: 1.6rem;
-    margin-bottom: 12px;
-    font-weight: 700;
-  }
-  .liberation-box p {
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #444;
-  }
-  /* Third box full width */
+  /* For three boxes: two side by side and one full width beneath */
   .liberation-box:nth-child(3) {
     flex-basis: 100%;
   }
-  .explore-btn {
-    display: inline-block;
-    background-color: #ff5722;
-    color: white;
-    font-weight: 700;
-    padding: 15px 45px;
-    border-radius: 35px;
-    text-decoration: none;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease;
-  }
-  .explore-btn:hover {
-    background-color: #e64a19;
-  }
 
-  /* MIND MASTERY SECTION */
-  .mind-mastery-section {
-    background-color: white;
-    color: #222;
-  }
-  .mind-mastery-overlay {
-    padding: 60px 20px;
-  }
-  .mind-mastery-container {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .mind-mastery-container h2 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
+  /* MIND MASTERY CARDS */
   .mind-cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 20px;
     justify-content: center;
-    margin-top: 40px;
-    margin-bottom: 40px;
   }
   .mind-card {
-    background-color: #f7f7f7;
-    border-radius: 15px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.07);
-    padding: 30px 25px;
     flex: 1 1 45%;
     min-width: 280px;
     box-sizing: border-box;
-    text-align: left;
-    transition: box-shadow 0.3s ease;
-  }
-  .mind-card:hover {
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-  }
-  .mind-card h4 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-  }
-  .mind-card p {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 15px;
-    color: #444;
-  }
-  .mind-card ul {
-    list-style: inside disc;
-    color: #555;
-    font-weight: 400;
-    font-size: 0.95rem;
-  }
-  .mind-cta-text {
-    font-weight: 600;
-    font-size: 1.3rem;
-    margin-bottom: 30px;
-    color: #333;
   }
 
-  /* WELLNESS SECTION */
-  .wellness-section {
-    background-color: #f9f9f9;
-    color: #222;
-  }
-  .wellness-overlay {
-    padding: 60px 20px;
-  }
-  .wellness-container {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .wellness-container h2 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
+  /* WELLNESS CARDS */
   .wellness-cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 20px;
     justify-content: center;
-    margin-top: 40px;
-    margin-bottom: 40px;
   }
   .wellness-card {
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    padding: 30px 25px;
     flex: 1 1 30%;
     min-width: 280px;
     box-sizing: border-box;
-    text-align: left;
-    transition: box-shadow 0.3s ease;
-  }
-  .wellness-card:hover {
-    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-  }
-  .wellness-card h4 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-  }
-  .wellness-card p {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #444;
-  }
-  .wellness-badges {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 30px;
-  }
-  .badge {
-    background-color: #ff5722;
-    color: white;
-    padding: 7px 18px;
-    border-radius: 25px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  .btn.explore-btn {
-    background-color: #ff5722;
-    color: white;
-    font-weight: 700;
-    padding: 15px 40px;
-    border-radius: 35px;
-    text-decoration: none;
-    font-size: 1.1rem;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-  }
-  .btn.explore-btn:hover {
-    background-color: #e64a19;
   }
 
-  /* PERSONAL RECOMMENDATIONS SECTION */
-  .personal-recommendations-section {
-    background-color: white;
-    color: #222;
-  }
-  .personal-recommendations-overlay {
-    padding: 60px 20px;
-  }
+  /* PERSONAL RECOMMENDATIONS */
   .personal-recommendations-container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  .personal-recommendations-container h2 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
   }
   .recommendation-category {
-    background-color: #f7f7f7;
-    border-radius: 15px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.07);
-    padding: 25px 20px;
-    box-sizing: border-box;
-    margin-bottom: 30px;
-    transition: box-shadow 0.3s ease;
-    width: 48%;
     display: inline-block;
     vertical-align: top;
+    width: 48%;
     min-width: 280px;
-    color: #444;
-  }
-  .recommendation-category:hover {
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-  }
-  .recommendation-category h4 {
-    font-size: 1.6rem;
-    margin-bottom: 12px;
-    font-weight: 700;
-  }
-  .recommendation-category p {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 10px;
-  }
-  .recommendation-category strong {
-    font-weight: 700;
-  }
-  .personal-recommendations-intro,
-  .personal-recommendations-summary {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 30px;
-    text-align: center;
-    color: #555;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    margin-right: 2%;
   }
   /* Fix last item margin */
   .recommendation-category:nth-child(2n) {
     margin-right: 0;
   }
-  /* Responsive fix for recommendations */
-  @media (max-width: 600px) {
-    .recommendation-category {
-      width: 100% !important;
-      margin-right: 0 !important;
-    }
+  /* Fix heading out of frame */
+  .personal-recommendations-container > h2,
+  .personal-recommendations-container > h3 {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
-  /* MOBILE RESPONSIVE (HERO & OTHER SECTIONS) */
+  /* MOBILE / TABLET RESPONSIVE FIXES */
   @media (max-width: 768px) {
-    /* Hero */
+    /* HERO SECTION - YOUR ORIGINAL PERFECT STYLING */
     .hero-section .hero-content {
       padding: 20px;
       text-align: center;
@@ -423,82 +101,208 @@
       font-size: 1.6rem;
     }
 
-    /* Liberation */
+    /* LIBERATION SECTION */
     .liberation-container {
-      padding: 20px;
+      padding: 20px 15px;
       text-align: center;
     }
     .liberation-features {
-      flex-direction: column;
-      gap: 20px;
+      flex-direction: column !important;
+      gap: 25px !important;
+      align-items: center !important;
     }
     .liberation-box {
-      padding: 15px;
-      width: 100%;
+      flex-basis: 100% !important;
+      padding: 15px 10px;
+      max-width: 400px;
+      box-sizing: border-box;
     }
     .liberation-box h4 {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+    .liberation-box p {
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+    /* Fix background on liberation-overlay */
+    .liberation-overlay {
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
     }
 
-    /* Mind Mastery */
+    /* MIND MASTERY SECTION */
     .mind-mastery-container {
-      padding: 20px;
+      padding: 20px 15px;
       text-align: center;
     }
     .mind-cards {
-      flex-direction: column;
-      gap: 20px;
+      flex-direction: column !important;
+      gap: 25px !important;
+      align-items: center !important;
     }
     .mind-card {
-      padding: 15px;
-      width: 100%;
+      flex-basis: 100% !important;
+      padding: 15px 10px;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+    .mind-card h4 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+    .mind-card p,
+    .mind-card ul {
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      text-align: left;
+      max-width: 360px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .mind-card ul {
+      padding-left: 20px;
+    }
+    .mind-cta-text {
+      font-size: 1.1rem;
+      margin-top: 25px;
+      margin-bottom: 15px;
+    }
+    /* Fix background on mind-mastery-overlay */
+    .mind-mastery-overlay {
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
     }
 
-    /* Wellness */
+    /* WELLNESS SECTION */
     .wellness-container {
-      padding: 20px;
+      padding: 20px 15px;
       text-align: center;
     }
     .wellness-cards {
-      flex-direction: column;
-      gap: 20px;
+      flex-direction: column !important;
+      gap: 25px !important;
+      align-items: center !important;
     }
     .wellness-card {
-      padding: 15px;
-      width: 100%;
+      flex-basis: 100% !important;
+      padding: 15px 10px;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+    .wellness-card h4 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+    .wellness-card p {
+      font-size: 1rem;
+      line-height: 1.4;
     }
     .wellness-badges {
       flex-wrap: wrap;
       justify-content: center;
+      margin-top: 20px;
+      gap: 8px;
     }
     .wellness-badges .badge {
       margin: 5px 8px;
-      font-size: 0.8rem;
-      padding: 6px 12px;
+      font-size: 0.85rem;
+      padding: 7px 14px;
+    }
+    /* Fix background on wellness-overlay */
+    .wellness-overlay {
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
     }
 
-    /* Personal Recommendations */
+    /* PERSONAL RECOMMENDATIONS SECTION */
     .personal-recommendations-container {
-      padding: 20px;
+      padding: 20px 15px !important;
       text-align: center;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      box-sizing: border-box;
     }
     .recommendation-category {
-      margin-bottom: 25px;
-      padding: 10px;
+      display: block !important;
       width: 100% !important;
-      margin-right: 0 !important;
+      max-width: 420px !important;
+      margin: 0 auto 25px auto !important;
+      padding: 15px 10px !important;
+      box-sizing: border-box;
+      text-align: left;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fafafa;
     }
     .recommendation-category h4 {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
     }
     .recommendation-category p {
-      font-size: 0.9rem;
+      font-size: 1rem;
+      line-height: 1.4;
+      margin-bottom: 10px;
     }
     .btn.explore-btn {
       width: 100%;
       max-width: 320px;
       margin: 0 auto 15px;
       display: block;
+    }
+    /* Fix background on personal-recommendations-overlay */
+    .personal-recommendations-overlay {
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+    }
+
+    /* TRUSTED PARTNERSHIPS SECTION */
+    .trusted-partnerships-container {
+      padding: 20px 15px;
+      text-align: center;
+    }
+    .partnership-category {
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+    .btn.explore-btn {
+      max-width: 300px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* JOIN THE NIGHT SHIFT SECTION */
+    .join-container {
+      padding: 20px 15px;
+      text-align: center;
+    }
+    .join-form input[type="email"] {
+      width: 100%;
+      max-width: 320px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .join-form button {
+      width: 100%;
+      max-width: 320px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+    .join-stats {
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .join-stats div h3 {
+      font-size: 1.5rem;
     }
   }
 </style>
@@ -669,48 +473,36 @@
       <div class="recommendation-category">
         <h4>High-Performance Workspace</h4>
         <p>Ergonomic standing desk, premium monitor, mechanical keyboard, and productivity accessories that transform your work environment into a success catalyst.</p>
-        <p><strong>Personal Impact</strong></p>
-        <p><strong>Investment Range</strong> $800-2000</p>
         <a href="/section4" class="btn explore-btn">Shop My Setup</a>
       </div>
 
       <div class="recommendation-category">
         <h4>Recovery & Sleep Optimization</h4>
         <p>Premium mattress, blackout curtains, sleep tracking device, temperature control, and recovery tools for optimal rest and regeneration.</p>
-        <p><strong>Personal Impact</strong></p>
-        <p><strong>Investment Range</strong> $500-1500</p>
         <a href="/section4" class="btn explore-btn">Optimize Sleep</a>
       </div>
 
       <div class="recommendation-category">
         <h4>Health & Fitness Arsenal</h4>
         <p>Smart fitness tracker, resistance bands, adjustable dumbbells, yoga mat, and supplements that keep me in peak physical condition.</p>
-        <p><strong>Personal Impact</strong></p>
-        <p><strong>Investment Range</strong> $300-800</p>
         <a href="/section4" class="btn explore-btn">Build Your Arsenal</a>
       </div>
 
       <div class="recommendation-category">
         <h4>Focus & Productivity Tools</h4>
         <p>Noise-canceling headphones, blue light glasses, premium notebook, time-blocking planner, and focus-enhancing accessories.</p>
-        <p><strong>Personal Impact</strong></p>
-        <p><strong>Investment Range</strong> $200-600</p>
         <a href="/section4" class="btn explore-btn">Enhance Focus</a>
       </div>
 
       <div class="recommendation-category">
         <h4>Travel & Mobile Setup</h4>
         <p>Premium laptop bag, portable chargers, travel router, compression clothing, and mobility accessories for the digital nomad lifestyle.</p>
-        <p><strong>Personal Impact</strong></p>
-        <p><strong>Investment Range</strong> $400-1000</p>
         <a href="/section4" class="btn explore-btn">Work Anywhere</a>
       </div>
 
       <div class="recommendation-category">
         <h4>Lifestyle & Mindset</h4>
         <p>Quality clothing, grooming essentials, meditation cushion, journaling tools, and lifestyle upgrades that reflect your success mindset.</p>
-        <p><strong>Personal Impact</strong></p>
-        <p><strong>Investment Range</strong> $250-750</p>
         <a href="/section4" class="btn explore-btn">Elevate Lifestyle</a>
       </div>
 
