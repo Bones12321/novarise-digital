@@ -102,9 +102,16 @@
     }
 
     /* LIBERATION SECTION */
+    /* Remove glassy block background on mobile/tablet but keep container content */
     .liberation-container {
-      padding: 20px 15px;
+      background: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 20px 15px !important;
       text-align: center;
+      max-width: 100% !important;
+      width: 100% !important;
+      margin: 0 auto !important;
     }
     .liberation-features {
       flex-direction: column !important;
@@ -125,17 +132,23 @@
       font-size: 1rem;
       line-height: 1.4;
     }
-    /* Fix background on liberation-overlay */
+    /* Zoom out background image for overlay */
     .liberation-overlay {
-      background-size: cover !important;
+      background-size: contain !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
     }
 
     /* MIND MASTERY SECTION */
     .mind-mastery-container {
-      padding: 20px 15px;
+      background: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 20px 15px !important;
       text-align: center;
+      max-width: 100% !important;
+      width: 100% !important;
+      margin: 0 auto !important;
     }
     .mind-cards {
       flex-direction: column !important;
@@ -170,17 +183,23 @@
       margin-top: 25px;
       margin-bottom: 15px;
     }
-    /* Fix background on mind-mastery-overlay */
+    /* Zoom out background image for overlay */
     .mind-mastery-overlay {
-      background-size: cover !important;
+      background-size: contain !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
     }
 
     /* WELLNESS SECTION */
     .wellness-container {
-      padding: 20px 15px;
+      background: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 20px 15px !important;
       text-align: center;
+      max-width: 100% !important;
+      width: 100% !important;
+      margin: 0 auto !important;
     }
     .wellness-cards {
       flex-direction: column !important;
@@ -212,21 +231,25 @@
       font-size: 0.85rem;
       padding: 7px 14px;
     }
-    /* Fix background on wellness-overlay */
+    /* Zoom out background image for overlay */
     .wellness-overlay {
-      background-size: cover !important;
+      background-size: contain !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
     }
 
     /* PERSONAL RECOMMENDATIONS SECTION */
     .personal-recommendations-container {
+      background: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
       padding: 20px 15px !important;
       text-align: center;
       width: 100% !important;
       max-width: 100% !important;
       overflow-x: hidden !important;
       box-sizing: border-box;
+      margin: 0 auto !important;
     }
     .recommendation-category {
       display: block !important;
@@ -255,9 +278,9 @@
       margin: 0 auto 15px;
       display: block;
     }
-    /* Fix background on personal-recommendations-overlay */
+    /* Zoom out background image for overlay */
     .personal-recommendations-overlay {
-      background-size: cover !important;
+      background-size: contain !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
     }
