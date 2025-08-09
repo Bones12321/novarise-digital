@@ -163,7 +163,7 @@ router.get('/login', (req, res) => {
   res.render('login', { title: 'Login', cart: req.session.cart || [] });
 });
 
-// POST: Login
+// POST: Login with cart merge and redirect to intended page
 router.post('/login', async (req, res, next) => {
   let email = '';
   if (req.body && typeof req.body.email === 'string') {
@@ -208,12 +208,28 @@ router.post('/login', async (req, res, next) => {
         return next(err);
       }
 
-      console.log('✅ Login success:', user.email, '| Role:', user.role);
-      if (user.role === 'admin') {
-        return res.redirect('/admin/dashboard');
-      } else {
-        return res.redirect('/dashboard');
+      // Merge carts: merge temporary saved cart with current session cart
+      if (!req.session.cart) {
+        req.session.cart = [];
       }
+      if (req.session.tempCart && req.session.tempCart.length) {
+        // merge by unique product title, you can change criteria
+        const merged = [...req.session.cart];
+        req.session.tempCart.forEach(item => {
+          if (!merged.find(p => p.title === item.title)) {
+            merged.push(item);
+          }
+        });
+        req.session.cart = merged;
+        delete req.session.tempCart;
+      }
+
+      console.log('✅ Login success:', user.email, '| Role:', user.role);
+
+      // Redirect to intended page or default dashboard/admin dashboard
+      const redirectTo = req.session.returnTo || (user.role === 'admin' ? '/admin/dashboard' : '/dashboard');
+      delete req.session.returnTo;
+      res.redirect(redirectTo);
     });
   })(req, res, next);
 });
@@ -229,12 +245,12 @@ router.get('/logout', (req, res, next) => {
 
 // GET: Resend verification
 router.get('/resend-verification', (req, res) => {
-  res.render('resendVerification', { 
-    title: 'Resend Verification', 
+  res.render('resendVerification', {
+    title: 'Resend Verification',
     cart: req.session.cart || null,
-    errors: [], 
-    success: null, 
-    email: '' 
+    errors: [],
+    success: null,
+    email: ''
   });
 });
 

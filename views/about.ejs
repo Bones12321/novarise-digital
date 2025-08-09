@@ -1,0 +1,74 @@
+<%- include('partials/header', { title: title, cart }) %>
+
+<style>
+  main.about-container {
+    max-width: 700px;
+    margin: 60px auto 80px auto;
+    padding: 30px 40px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  main.about-container h1 {
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  }
+
+  main.about-container p {
+    margin-bottom: 20px;
+    font-size: 1.15rem;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+
+  main.about-container strong {
+    font-weight: 700;
+  }
+</style>
+
+<main class="about-container <%= pageClass %>">
+  <h1>About NovaRise Digital</h1>
+
+  <p>
+    At <strong>NovaRise Digital</strong>, we believe that the traditional 9-to-5 lifestyle no longer fits everyone’s vision of success and fulfillment.
+    Our platform is built to empower individuals to take control of their personal growth, mental resilience, physical health, and financial freedom — all through accessible, high-quality digital products.
+  </p>
+
+  <p>
+    Founded by two brothers with diverse expertise in health sciences and renewable energy, NovaRise Digital stands at the intersection of science, technology, and self-development.
+    We understand firsthand the struggles of feeling stuck in systems that limit potential, and our mission is to provide tools that help you break free from those limitations.
+  </p>
+
+  <p>
+    We curate and create content that is:
+  </p>
+
+  <ul>
+    <li><strong>Evidence-based:</strong> Grounded in the latest research and professional insights.</li>
+    <li><strong>Actionable:</strong> Designed for real-life application, helping you build daily habits that last.</li>
+    <li><strong>Flexible:</strong> Available anywhere, anytime — so you can learn and grow at your own pace.</li>
+    <li><strong>Supportive:</strong> Backed by a community and resources that encourage progress and accountability.</li>
+  </ul>
+
+  <p>
+    Our vision goes beyond just providing products. We strive to create a movement of people rising above limits, equipped with the knowledge and tools to design lives full of purpose, health, and freedom.
+  </p>
+
+  <p>
+    Whether you’re looking to enhance your mindset, optimize your health, or launch your own digital venture, <strong>NovaRise Digital</strong> is your partner on that journey.
+  </p>
+
+  <p>
+    <strong>Together, we rise beyond the ordinary.</strong>
+  </p>
+</main>
+
+<%- include('partials/footer') %>

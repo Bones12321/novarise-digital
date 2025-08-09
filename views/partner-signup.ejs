@@ -1,0 +1,38 @@
+<%- include('partials/header', { title: title }) %>
+
+<main style="max-width: 480px; margin: 50px auto; background: rgba(255,255,255,0.9); padding: 30px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.15); font-family: 'Outfit', sans-serif;">
+  <h1><%= title %></h1>
+
+  <p>Hello, <strong><%= user.name %></strong>! To become a Partner, please provide the following:</p>
+
+  <% if (errors.length > 0) { %>
+    <div style="background:#f8d7da; color:#721c24; padding:12px; margin-bottom:20px; border-radius:6px;">
+      <ul>
+        <% errors.forEach(error => { %>
+          <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form action="/partner-signup" method="POST" novalidate>
+    <label for="username" style="display:block; margin-bottom:8px; font-weight:600; color:#222;">Username (for your product display)</label>
+    <input type="text" id="username" name="username" value="<%= formData.username || '' %>" required style="width:100%; padding:10px; margin-bottom:18px; border:1px solid #aaa; border-radius:6px; font-size:1rem;">
+
+    <div style="margin-bottom: 15px;">
+      <input type="checkbox" id="terms" name="terms" value="agree" <%= formData.terms ? 'checked' : '' %> required>
+      <label for="terms" style="color:#222; font-weight:600;"> I accept the <a href="/terms" target="_blank">Terms and Conditions</a></label>
+    </div>
+
+    <div style="margin-bottom: 25px;">
+      <input type="checkbox" id="confirmSeller" name="confirmSeller" value="yes" <%= formData.confirmSeller ? 'checked' : '' %> required>
+      <label for="confirmSeller" style="color:#222; font-weight:600;"> I confirm I want to become a Seller and Affiliate Partner</label>
+    </div>
+
+    <button type="submit" class="btn-cta" style="width:100%; padding:12px; background:#2575fc; color:white; border:none; border-radius:30px; font-weight:700; font-size:1.1rem; cursor:pointer;">
+      Join as a Partner
+    </button>
+  </form>
+</main>
+
+<%- include('partials/footer') %>

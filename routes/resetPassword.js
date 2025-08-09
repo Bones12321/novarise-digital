@@ -1,7 +1,13 @@
-const express = require('express');
+const express = require('express'); 
 const router = express.Router();
-const bcrypt = require('bcrypt'); // Add bcrypt
-const User = require('../models/User'); // Adjust path if needed
+const bcrypt = require('bcrypt');
+const User = require('../models/User');
+
+// Password validation regex
+const isStrongPassword = (password) => {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return regex.test(password);
+};
 
 // Show reset password form
 router.get('/:token', async (req, res) => {
@@ -36,11 +42,17 @@ router.post('/:token', async (req, res) => {
       return res.send('Password reset token is invalid or has expired.');
     }
 
-    // 🔐 Hash the new password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    // Validate password strength
+    if (!isStrongPassword(password)) {
+      return res.render('reset-password', {
+        token: req.params.token,
+        error: 'Password must be at least 8 characters long and include a lowercase letter, an uppercase letter, a number, and a special character.'
+      });
+    }
 
-    // Save hashed password and clear the reset token
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;

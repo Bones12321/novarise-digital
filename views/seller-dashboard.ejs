@@ -1,11 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Seller Dashboard</title>
-</head>
-<body>
-  <h1>Welcome Seller, <%= user.name %>!</h1>
-  <p>Here you can see your sales and manage your products.</p>
-  <a href="/auth/logout">Logout</a>
-</body>
-</html>
+<%- include('partials/header', { title: 'Seller Dashboard', user: user, cart: cart }) %>
+
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: url('/images/logo.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+  }
+
+  main {
+    flex: 1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0,0,0,0.5);
+  }
+
+  .dashboard-container {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .dashboard-container h1 {
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+
+  .dashboard-container p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+  }
+
+  .btn-logout {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #222;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-logout:hover {
+    background-color: #444;
+  }
+</style>
+
+<main>
+  <div class="dashboard-container">
+    <h1>Welcome, <%= user.name %>!</h1>
+    <p>This is your seller dashboard to upload products, track earnings, view sales, and manage your account.</p>
+    <a href="/auth/logout" class="btn-logout">Logout</a>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

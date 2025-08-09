@@ -29,7 +29,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Middleware to parse JSON and urlencoded bodies
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));  // changed to true for form parsing
 
 // Setup session
 app.use(session({
@@ -42,6 +42,12 @@ app.use(session({
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Make user available in all templates
+app.use((req, res, next) => {
+  res.locals.user = req.user || null;
+  next();
+});
 
 // Flash middleware
 app.use(flash());
@@ -69,14 +75,14 @@ app.use((req, res, next) => {
 // Password entry page - must be before passwordProtect middleware
 app.use('/password', require('./routes/password'));
 
-// NEW: Forgot and Reset Password Routes
+// Forgot and Reset Password Routes
 app.use('/forgot-password', require('./routes/forgotPassword'));
 app.use('/reset-password', require('./routes/resetPassword'));
 
 // Password protection middleware
 app.use(passwordProtect);
 
-// Routes
+// Main routes including contact POST handler
 app.use('/', require('./routes/index'));
 app.use('/cart', require('./routes/cart'));
 app.use('/checkout', require('./routes/checkout'));

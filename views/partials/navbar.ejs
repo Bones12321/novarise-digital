@@ -13,9 +13,10 @@
       Beyond the 9 to 5
     </a>
 
-    <!-- Cart Icon with badge -->
+    <!-- Cart Icon and Profile Icon container -->
     <div class="d-flex align-items-center">
-      <a href="/cart" class="position-relative me-2 text-white">
+      <!-- Cart Icon with badge -->
+      <a href="/cart" class="position-relative me-3 text-white">
         <i class="bi bi-cart-fill fs-4"></i>
         <% 
           let totalQuantity = 0;
@@ -29,17 +30,40 @@
           <%= totalQuantity %>
         </span>
       </a>
+
+      <% if (user) { %>
+        <!-- Profile dropdown -->
+        <div class="dropdown">
+          <a href="#" class="text-white rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+             id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" 
+             style="width: 38px; height: 38px; font-weight: 600; cursor: pointer; user-select: none;">
+            <%= user.name.charAt(0).toUpperCase() %>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" style="min-width: 220px;">
+            <li class="dropdown-item-text">
+              <strong><%= user.name %></strong><br/>
+              <small><%= user.email %></small>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/dashboard">Go to Dashboard</a></li>
+            <li><a class="dropdown-item" href="/auth/logout">Log out</a></li>
+          </ul>
+        </div>
+      <% } %>
     </div>
 
     <!-- Collapsible menu -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav flex-column flex-grow-1">
-        <li class="nav-item"><a class="nav-link" href="/auth/login">Log in</a></li>
+        <% if (!user) { %>
+          <li class="nav-item"><a class="nav-link" href="/auth/login">Log in</a></li>
+        <% } %>
         <li class="nav-item"><a class="nav-link" href="/section1">Guide to Freedom</a></li>
         <li class="nav-item"><a class="nav-link" href="/section2">Mental Strength and Health</a></li>
         <li class="nav-item"><a class="nav-link" href="/section3">Physical Health</a></li>
         <li class="nav-item"><a class="nav-link" href="/section4">Recommended Products</a></li>
         <li class="nav-item"><a class="nav-link" href="/section5">Affiliate Program</a></li>
+        <li class="nav-item"><a class="nav-link" href="/marketplace">Marketplace</a></li>
         <li class="nav-item"><a class="nav-link" href="/section6">Our story</a></li>
         <li class="nav-item"><a class="nav-link" href="/terms">Terms and Conditions</a></li>
       </ul>

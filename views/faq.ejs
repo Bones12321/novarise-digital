@@ -1,0 +1,156 @@
+<%- include('partials/header', { title: 'Frequently Asked Questions' }) %>
+
+<style>
+  main.faq-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  main.faq-container h1 {
+    margin-bottom: 30px;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  section {
+    border-bottom: 1px solid #444;
+    padding: 15px 0;
+  }
+
+  section h3 {
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  section h3::after {
+    content: '▼'; /* Down arrow */
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+  }
+
+  section.active h3::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  section p {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    padding: 0 5px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  section.active p {
+    max-height: 1000px; /* large enough for content */
+    padding: 10px 5px 0 5px;
+  }
+</style>
+
+<main class="faq-container <%= pageClass %>">
+  <h1>Frequently Asked Questions</h1>
+
+  <section>
+    <h3>1. How quickly will I see results using your digital guides?</h3>
+    <p>
+      Every individual’s journey is unique, and results can vary depending on your dedication and consistency. Our guides are designed with practical steps that you can implement immediately to start seeing improvements in focus, discipline, and mindset. Many users notice small changes within days, but meaningful transformation often takes weeks or months of consistent effort. We encourage you to be patient with yourself and celebrate progress along the way. Remember, lasting change is a marathon, not a sprint.
+    </p>
+  </section>
+
+  <section>
+    <h3>2. Are these guides suitable for beginners?</h3>
+    <p>
+      Yes, absolutely! We understand that starting something new can feel overwhelming. That’s why all our products are designed to be accessible, breaking down complex concepts into clear, actionable steps. Whether you’re new to personal development or have experience, you’ll find value in our guides and courses. We also encourage reaching out if you need any extra help or support — we’re here to help you succeed at every stage.
+    </p>
+  </section>
+
+  <section>
+    <h3>3. How do I access my purchased digital products?</h3>
+    <p>
+      Once you complete a purchase, you will receive an email with detailed instructions on how to download your product. Additionally, you can always log into your NovaRise account to access your purchases at any time. If you experience any issues accessing your downloads, please contact our support team and we’ll ensure you get what you paid for without delay.
+    </p>
+  </section>
+
+  <section>
+    <h3>4. Can I use these guides on multiple devices?</h3>
+    <p>
+      Yes! Our digital products are designed to be device-agnostic so you can use them on any device — whether it’s your desktop, tablet, or smartphone. This allows you the freedom to learn and apply the material wherever you are, whether at home, during a commute, or at your favorite café. Flexibility is key to building habits that last.
+    </p>
+  </section>
+
+  <section>
+    <h3>5. Do you offer support if I have questions?</h3>
+    <p>
+      Absolutely. We value open communication and want you to feel supported throughout your journey. If you have questions about a product, how to implement the strategies, or anything else, please don’t hesitate to reach out via our contact page. Our team strives to respond promptly with thoughtful, helpful answers tailored to your needs. We’re here to help you succeed.
+    </p>
+  </section>
+
+  <section>
+    <h3>6. How often do you update your products?</h3>
+    <p>
+      We regularly review and improve our digital products to incorporate the latest research, user feedback, and best practices. Updates are an important part of delivering quality and value. When updates are available, customers who have already purchased the product will receive notifications and, in most cases, free access to the new versions. Your growth is our mission.
+    </p>
+  </section>
+
+  <section>
+    <h3>7. Who are the sellers on NovaRise Marketplace?</h3>
+    <p>
+      Our marketplace is home to a diverse community of sellers — from experts in personal development to creators of unique productivity tools. We carefully vet all sellers to ensure quality and trustworthiness. Sellers on NovaRise are passionate about helping you grow and succeed. If you have questions about a seller or product, our support team is always happy to assist.
+    </p>
+  </section>
+
+  <section>
+    <h3>8. How can I become a seller on NovaRise?</h3>
+    <p>
+      We welcome new sellers who are committed to providing valuable digital products aligned with our mission. To get started, visit the Affiliate & Seller Hub on our site where you can find detailed information about requirements, revenue splits, and how to list your products. Our team also provides onboarding support to help you set up your shop successfully. Selling on NovaRise means joining a community dedicated to growth and quality.
+    </p>
+  </section>
+
+  <section>
+    <h3>9. What are the benefits of joining the NovaRise affiliate program?</h3>
+    <p>
+      Our affiliate program offers a generous 35% commission on every sale generated through your unique referral link. It’s a great way to earn passive income by sharing products you believe in. Affiliates receive access to marketing materials, real-time tracking dashboards, and dedicated support. Whether you’re a blogger, coach, or just passionate about personal growth, our affiliate program empowers you to earn while making a positive impact.
+    </p>
+  </section>
+
+  <section>
+    <h3>10. How do payouts work for sellers and affiliates?</h3>
+    <p>
+      Sellers receive 90% of the revenue generated from their sales after transaction fees. Payouts are processed monthly, with transparent reporting available in your seller dashboard. Affiliates receive commissions based on tracked referrals, with payments also disbursed monthly. We believe in fair, timely payouts and provide all necessary tools for you to monitor your earnings accurately.
+    </p>
+  </section>
+
+  <section>
+    <h3>11. Can I use NovaRise products for commercial purposes?</h3>
+    <p>
+      Most of our digital products are for personal use only unless explicitly stated otherwise in the product license. Please review the terms provided with each product. If you’re interested in commercial licensing or bulk purchases, please contact our support team to discuss your needs.
+    </p>
+  </section>
+
+  <section>
+    <h3>12. How do you protect my personal information?</h3>
+    <p>
+      Protecting your privacy is paramount. We adhere to strict data protection policies and use secure technologies to safeguard your information. We do not share your personal data with third parties except as necessary for processing transactions or complying with legal obligations. You can review our full privacy policy on our website to learn more about how we handle your data.
+    </p>
+  </section>
+</main>
+
+<script>
+  document.querySelectorAll('section h3').forEach((question) => {
+    question.addEventListener('click', () => {
+      const section = question.parentElement;
+      section.classList.toggle('active');
+    });
+  });
+</script>
+
+<%- include('partials/footer') %>

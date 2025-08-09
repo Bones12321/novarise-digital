@@ -1,30 +1,32 @@
 const express = require('express');
 const router = express.Router();
-const ensureAuthenticated = require('../middleware/auth'); // if using login
+const ensureAuthenticated = require('../middleware/auth');
 const Product = require('../models/Product');
 
-router.get('/', async (req, res) => {
+router.get('/', ensureAuthenticated, async (req, res) => {
   const cart = req.session.cart || [];
   const total = cart.reduce((sum, item) => sum + item.price, 0);
   res.render('checkout', { title: 'Checkout', cart, total });
 });
 
-router.post('/place-order', async (req, res) => {
+router.post('/place-order', ensureAuthenticated, async (req, res) => {
   const { name, email, address } = req.body;
   const cart = req.session.cart || [];
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  // Save order to DB if needed
-  // Send confirmation email if needed
+  // TODO: Save order to DB if needed
+  // TODO: Send confirmation email if needed
 
-  // Temporary: simulate redirect to PayFast
+  // Clear cart after order placed
+  req.session.cart = [];
+
+  // Temporary: simulate redirect to payment success
   res.redirect(`/checkout/success`);
 });
 
-router.get('/success', (req, res) => {
-  // Clear cart session
-  req.session.cart = [];
-  res.render('order-success'); // allow download from here
+router.get('/success', ensureAuthenticated, (req, res) => {
+  // Cart already cleared on order placement
+  res.render('order-success');
 });
 
 module.exports = router;

@@ -4,12 +4,21 @@ const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    trim: true,
+  },
+
+  username: {
+    type: String,
+    required: false,  // Not required initially, but required when signing up as partner
+    trim: true,
   },
 
   email: {
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
+    trim: true,
   },
 
   password: {
@@ -19,7 +28,7 @@ const UserSchema = new mongoose.Schema({
 
   role: {
     type: String,
-    enum: ['admin', 'client', 'seller'],
+    enum: ['admin', 'client', 'seller', 'affiliate'],
     default: 'client',
   },
 

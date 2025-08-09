@@ -1,9 +1,17 @@
 // middleware/auth.js
 
-// Placeholder authentication middleware
-// In the future, replace this with real auth checks
-
 module.exports = (req, res, next) => {
-  // Allow all requests through for now
-  next();
+  if (req.isAuthenticated && req.isAuthenticated()) {
+    return next();
+  }
+
+  // Save current URL to redirect after login
+  req.session.returnTo = req.originalUrl;
+
+  // Save current cart temporarily before redirecting to login
+  if (req.session.cart && req.session.cart.length) {
+    req.session.tempCart = req.session.cart;
+  }
+
+  res.redirect('/auth/login');
 };

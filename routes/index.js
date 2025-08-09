@@ -1,5 +1,28 @@
 const express = require('express');
 const router = express.Router();
+const nodemailer = require('nodemailer');
+const Product = require('../models/Product'); // Make sure this exists for marketplace products
+const User = require('../models/User'); // Import User model for updating roles
+
+// Middleware to check if user is logged in
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated && req.isAuthenticated()) {
+    return next();
+  }
+  req.flash('error_msg', 'Please log in to access that page');
+  res.redirect('/login');
+}
+
+// Configure your SMTP transporter using environment variables
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,       // e.g. smtp.gmail.com
+  port: parseInt(process.env.EMAIL_PORT, 10), // 465 or 587
+  secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for others
+  auth: {
+    user: process.env.EMAIL_USER,    // your SMTP email from .env
+    pass: process.env.EMAIL_PASS,    // your SMTP password or app password
+  },
+});
 
 // Route for home page
 router.get('/', (req, res) => {
@@ -111,6 +134,95 @@ router.get('/section5', (req, res) => {
   });
 });
 
+// *** New Partner Signup Routes ***
+
+// GET partner signup page - only if logged in
+router.get('/partner-signup', ensureAuthenticated, (req, res) => {
+  res.render('partner-signup', { title: 'Join as a Partner', user: req.user, errors: [], formData: {} });
+});
+
+// POST partner signup form - only if logged in
+router.post('/partner-signup', ensureAuthenticated, async (req, res) => {
+  try {
+    const { username, terms, confirmSeller } = req.body;
+    let errors = [];
+
+    if (!username || username.trim().length === 0) {
+      errors.push({ msg: 'Username is required' });
+    }
+    if (!terms) {
+      errors.push({ msg: 'You must accept the Terms and Conditions' });
+    }
+    if (!confirmSeller) {
+      errors.push({ msg: 'You must confirm to become a Seller and Affiliate Partner' });
+    }
+
+    if (errors.length > 0) {
+      return res.render('partner-signup', { title: 'Join as a Partner', user: req.user, errors, formData: req.body });
+    }
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      req.flash('error_msg', 'User not found');
+      return res.redirect('/login');
+    }
+
+    // Update username and role
+    user.username = username.trim();
+    user.role = 'seller';
+
+    await user.save();
+
+    // refresh session user so role change is effective immediately
+    if (typeof req.login === 'function') {
+      req.login(user, (loginErr) => {
+        if (loginErr) {
+          console.error('Error refreshing login after partner signup:', loginErr);
+          req.flash('success_msg', 'You are now a Partner! Please log out and log back in to access the seller dashboard.');
+          return res.redirect('/login');
+        }
+        req.flash('success_msg', 'You are now a Partner! Access your seller dashboard below.');
+        return res.redirect('/seller-dashboard');
+      });
+    } else {
+      // fallback: update req.user object and redirect
+      req.user.username = user.username;
+      req.user.role = user.role;
+      req.flash('success_msg', 'You are now a Partner! Access your seller dashboard below.');
+      return res.redirect('/seller-dashboard');
+    }
+  } catch (err) {
+    console.error(err);
+    req.flash('error_msg', 'Something went wrong. Please try again.');
+    res.redirect('/partner-signup');
+  }
+});
+
+// --- SELLER DASHBOARD ROUTE (added) ---
+router.get('/seller-dashboard', ensureAuthenticated, (req, res) => {
+  // ensure only sellers access this page
+  if (!req.user || req.user.role !== 'seller') {
+    req.flash('error_msg', 'You must be a seller to access the Seller Dashboard.');
+    return res.redirect('/');
+  }
+
+  res.render('seller-dashboard', {
+    title: 'Seller Dashboard',
+    user: req.user,
+    backgroundImage: '/images/seller-dashboard-bg.jpg', // optional - change or remove if not needed
+  });
+});
+// --- end seller dashboard ---
+
+// GET login page
+router.get('/login', (req, res) => {
+  res.render('login', {
+    title: 'Login',
+    backgroundImage: '/images/login-bg.jpg',
+  });
+});
+
 // Route for Section 6 page (Our Story)
 router.get('/section6', (req, res) => {
   res.render('section6', {
@@ -119,11 +231,149 @@ router.get('/section6', (req, res) => {
   });
 });
 
+// Route for Marketplace page (Section 7)
+router.get('/marketplace', async (req, res) => {
+  try {
+    // Fetch products from your DB model for marketplace
+    const products = await Product.find({});
+
+    res.render('section7', {
+      title: 'Marketplace',
+      description: `Explore the NovaRise marketplace — your curated space to discover digital products that empower your personal and professional growth. From productivity tools to mindset guides, our sellers offer quality resources crafted to help you unlock your full potential.`,
+      quote: `"Empower yourself with digital tools designed for success." – NovaRise`,
+      backgroundImage: '/images/logo.png',
+      products,
+      user: req.user,
+      cart: req.session.cart || []
+    });
+  } catch (error) {
+    console.error('Error loading marketplace:', error);
+    res.status(500).send('Failed to load marketplace');
+  }
+});
+
 // Route for Terms and Conditions page
 router.get('/terms', (req, res) => {
   res.render('terms', {
     title: 'Terms and Conditions',
     backgroundImage: '/images/logo.png',
+  });
+});
+
+// Contact page GET
+router.get('/contact', (req, res) => {
+  res.render('contact', {
+    title: 'Contact Us',
+    backgroundImage: '/images/contact-bg.jpg',
+    pageClass: 'contact-page'
+  });
+});
+
+// Contact page POST - form submission
+router.post('/contact', async (req, res) => {
+  const { name, email, topic, message } = req.body;
+
+  // Basic validation
+  if (!name || !email || !topic || !message) {
+    return res.render('contact', {
+      title: 'Contact Us',
+      backgroundImage: '/images/contact-bg.jpg',
+      pageClass: 'contact-page',
+      errorMessage: 'Please fill in all fields including the topic.',
+      name,
+      email,
+      topic,
+      message,
+    });
+  }
+
+  // Simple email format check
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.render('contact', {
+      title: 'Contact Us',
+      backgroundImage: '/images/contact-bg.jpg',
+      pageClass: 'contact-page',
+      errorMessage: 'Please enter a valid email address.',
+      name,
+      email,
+      topic,
+      message,
+    });
+  }
+
+  // Prepare email to NovaRise team
+  const teamMailOptions = {
+    from: `"NovaRise Website Contact" <${transporter.options.auth.user}>`,
+    to: 'novariseteam@gmail.com',
+    subject: `New Contact Message: ${topic}`,
+    html: `
+      <h2>New Contact Message Received</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Topic:</strong> ${topic}</p>
+      <p><strong>Message:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>
+    `,
+  };
+
+  // Prepare confirmation email to user
+  const userMailOptions = {
+    from: `"NovaRise Team" <${transporter.options.auth.user}>`,
+    to: email,
+    subject: 'Thank you for contacting NovaRise!',
+    html: `
+      <p>Hi ${name},</p>
+      <p>Thank you for reaching out to NovaRise regarding <strong>${topic}</strong>.</p>
+      <p>We have received your message and will respond as soon as possible.</p>
+      <p>In the meantime, feel free to explore our site or reach out again.</p>
+      <p>Best regards,<br/>The NovaRise Team</p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(teamMailOptions);
+    await transporter.sendMail(userMailOptions);
+
+    res.render('contact', {
+      title: 'Contact Us',
+      backgroundImage: '/images/contact-bg.jpg',
+      pageClass: 'contact-page',
+      successMessage: 'Your message has been sent! We will get back to you shortly.',
+      name: '',
+      email: '',
+      topic: '',
+      message: '',
+    });
+  } catch (error) {
+    console.error('Error sending contact emails:', error);
+    res.render('contact', {
+      title: 'Contact Us',
+      backgroundImage: '/images/contact-bg.jpg',
+      pageClass: 'contact-page',
+      errorMessage: 'Sorry, something went wrong while sending your message. Please try again later.',
+      name,
+      email,
+      topic,
+      message,
+    });
+  }
+});
+
+// FAQ page GET
+router.get('/faq', (req, res) => {
+  res.render('faq', {
+    title: 'Frequently Asked Questions',
+    backgroundImage: '/images/faq-bg.jpg',
+    pageClass: 'faq-page'
+  });
+});
+
+// About page GET
+router.get('/about', (req, res) => {
+  res.render('about', {
+    title: 'About Us',
+    backgroundImage: '/images/about-bg.jpg', // choose a suitable background or leave blank
+    pageClass: 'about-page'
   });
 });
 

@@ -1,11 +1,11 @@
-<%- include('partials/header', { title: 'Guide to Freedom' }) %>
+<%- include('partials/header', { title: 'Marketplace', user: user, cart: cart }) %>
 
 <style>
   body {
     font-family: 'Outfit', sans-serif;
     margin: 0;
     padding: 0;
-    background: url('/images/hero-bg.jpg') no-repeat center center fixed;
+    background: url('/images/logo.png') no-repeat center center fixed;
     background-size: cover;
     color: #fff;
   }
@@ -18,14 +18,21 @@
     text-shadow: 0 2px 6px rgba(0,0,0,0.5);
   }
 
-  .description {
-    text-align: center;
-    max-width: 750px;
+  /* Glass effect container for description */
+  .description-box {
+    max-width: 700px;
     margin: 0 auto 40px;
+    padding: 25px 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    color: #111;
     font-size: 1.1rem;
     font-weight: 500;
-    color: #fff;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    text-align: center;
   }
 
   .products-container {
@@ -75,7 +82,12 @@
   .product-box p {
     font-size: 1rem;
     margin-bottom: 15px;
-    color: #333;
+    color: #111; /* darker text */
+    background-color: rgba(255, 255, 255, 0.7); /* white transparent box */
+    padding: 5px 12px;
+    border-radius: 12px;
+    display: inline-block;
+    text-shadow: none;
   }
 
   .product-box button {
@@ -102,19 +114,38 @@
     color: #fff;
     text-shadow: 0 2px 5px rgba(0,0,0,0.7);
   }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ccc;
+    margin-top: 40px;
+    font-size: 0.9rem;
+  }
 </style>
 
 <main>
-  <h1>Guide to Freedom</h1>
+  <h1>Marketplace</h1>
 
-  <p class="description">
-    At NovaRise, we believe digital products are the future of personal growth. Our guides, blueprints, and tools are designed to help you build discipline, mental resilience, and financial freedom — all accessible instantly from anywhere in the world. By selling digital products, we remove barriers and empower you to take action at your own pace. Every product we offer is crafted with purpose, clarity, and real-life application. Our mission is to help you unlock your full potential, one digital guide at a time.
-  </p>
+  <div class="description-box">
+    <%= description %>
+  </div>
 
   <div class="products-container">
-    <% products.forEach((product, index) => { %>
+    <% 
+      // Combine real products with some fake ones for display 
+      const fakeProducts = [
+        { title: 'Productivity Power Pack', price: 29.99, image: '/images/product5.jpg' },
+        { title: 'Mindset Masterclass', price: 39.99, image: '/images/product6.jpg' },
+        { title: 'Financial Freedom Blueprint', price: 49.99, image: '/images/product7.jpg' },
+        { title: 'Stress Relief Audio Series', price: 19.99, image: '/images/product8.jpg' },
+      ];
+      const allProducts = [...products, ...fakeProducts];
+      allProducts.forEach((product, index) => { 
+    %>
       <div class="product-box">
-        <img src="<%= product.image %>" alt="<%= product.title %>" />
+        <img src="<%= product.image || '/images/default-product.jpg' %>" alt="<%= product.title %>" />
         <h2><%= product.title %></h2>
         <p>$<%= product.price.toFixed(2) %></p>
         <button class="add-to-cart-btn" 
@@ -128,10 +159,11 @@
   </div>
 
   <p class="quote">
-    "Discipline is the bridge between goals and freedom." – NovaRise
+    "Empower yourself with digital tools designed for success." – NovaRise
   </p>
 </main>
 
+<!-- Footer -->
 <%- include('partials/footer') %>
 
 <!-- Bootstrap JS -->
