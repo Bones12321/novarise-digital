@@ -112,6 +112,45 @@
     font-size: 0.9rem;
     margin-left: 5px;
   }
+
+  /* === MOBILE-ONLY CHANGES === */
+  @media (max-width: 768px) {
+    /* Glassy box for description */
+    .description {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px) saturate(180%);
+      -webkit-backdrop-filter: blur(10px) saturate(180%);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      color: #111;
+      padding: 25px 20px;
+      text-shadow: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      max-width: 90%;
+      margin-bottom: 40px;
+    }
+
+    /* Smaller products and two per row */
+    .products-container {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 100%;
+      padding: 10px;
+    }
+
+    .product-box img {
+      height: 140px;
+    }
+
+    .product-box h2 {
+      font-size: 1rem;
+    }
+
+    .product-box p {
+      font-size: 0.9rem;
+    }
+  }
 </style>
 
 <main>
@@ -175,15 +214,14 @@
           const data = await response.json();
 
           const badge = document.querySelector('nav .badge');
-if (badge) {
-  if (data.cartCount > 0) {
-    badge.textContent = data.cartCount;
-    badge.style.display = 'inline-block';
-  } else {
-    badge.style.display = 'none';
-  }
-}
-
+          if (badge) {
+            if (data.cartCount > 0) {
+              badge.textContent = data.cartCount;
+              badge.style.display = 'inline-block';
+            } else {
+              badge.style.display = 'none';
+            }
+          }
 
           alert(`Added "${name}" to basket!`);
         } else {

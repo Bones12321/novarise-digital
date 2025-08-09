@@ -42,6 +42,13 @@
       .navbar-nav.flex-column.flex-grow-1 > li > a.nav-link {
         font-size: 1rem;
         padding-left: 0;
+        white-space: nowrap; /* prevent wrapping */
+      }
+
+      /* Dropdown menu width to fit longest word exactly on mobile */
+      .collapse.navbar-collapse {
+        width: max-content !important;
+        min-width: 220px; /* keep min-width from desktop for smaller menus */
       }
     }
   </style>

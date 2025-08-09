@@ -19,6 +19,9 @@
     background: rgba(255, 255, 255, 0.85);
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+
+    overflow-x: auto; /* Allow horizontal scroll on small screens */
+    box-sizing: border-box;
   }
 
   h1 {
@@ -32,6 +35,8 @@
   table.cart-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; /* Fix columns to avoid overflow */
+    word-wrap: break-word;
   }
 
   table.cart-table thead {
@@ -44,6 +49,7 @@
     padding: 15px 20px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
   }
 
   table.cart-table tbody tr:last-child td {
@@ -65,11 +71,16 @@
     background-color: #e74c3c;
     border: none;
     color: white;
-    padding: 8px 16px;
-    border-radius: 25px;
+    padding: 6px 10px; /* Reduced padding for fit */
+    border-radius: 20px; /* Slightly smaller radius */
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.3s ease;
+    max-width: 100%; /* prevent overflow */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
   }
 
   button.remove-btn:hover {
@@ -106,6 +117,63 @@
     text-decoration: none;
     color: white;
   }
+
+  /* MOBILE ADJUSTMENTS */
+  @media (max-width: 768px) {
+    main {
+      margin: 20px 10px;
+      padding: 15px 10px;
+      max-width: 100%;
+    }
+
+    /* Make all text inside main smaller on mobile */
+    main, main * {
+      font-size: 0.85rem !important;
+    }
+
+    h1 {
+      font-size: 1.6rem !important;
+      margin-bottom: 15px !important;
+    }
+
+    table.cart-table th,
+    table.cart-table td {
+      padding: 6px 8px !important;
+    }
+
+    table.cart-table thead {
+      font-size: 0.9rem !important;
+    }
+
+    .cart-empty {
+      font-size: 0.9rem !important;
+      padding: 25px 10px !important;
+    }
+
+    button.remove-btn {
+      padding: 6px 10px !important; /* Keep original padding */
+      font-size: inherit !important; /* Keep button font size unchanged */
+      border-radius: 16px !important;
+    }
+    /* Smaller font size for the "Remove" text inside the button */
+    button.remove-btn span {
+      font-size: 0.6rem !important;
+    }
+
+    .cart-total {
+      font-size: 1rem !important;
+      margin-top: 15px !important;
+    }
+
+    .checkout-btn {
+      padding: 8px 16px !important;
+      font-size: 0.9rem !important;
+      width: 100% !important;
+      text-align: center !important;
+      margin-top: 10px !important;
+      border-radius: 18px !important;
+    }
+  }
 </style>
 
 <main>
@@ -139,7 +207,7 @@
             <td>
               <form action="/cart/remove" method="POST" class="remove-item-form">
                 <input type="hidden" name="id" value="<%= item.id %>">
-                <button type="submit" class="remove-btn">Remove</button>
+                <button type="submit" class="remove-btn"><span>Remove</span></button>
               </form>
             </td>
           </tr>
