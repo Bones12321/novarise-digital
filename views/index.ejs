@@ -1,5 +1,152 @@
 <%- include('partials/header', { title: 'NovaRise' }) %>
 
+<style>
+  /* Mobile Responsive Fixes */
+  @media (max-width: 768px) {
+    /* HERO SECTION */
+    .hero-section .hero-content {
+      padding: 20px;
+      text-align: center;
+    }
+    .hero-section .main-title {
+      font-size: 2.2rem;
+    }
+    .hero-section .tagline {
+      font-size: 1.1rem;
+    }
+    .hero-buttons {
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .hero-buttons a {
+      width: 100%;
+      max-width: 300px;
+    }
+    .hero-stats {
+      flex-direction: column;
+      gap: 15px;
+    }
+    .hero-stats div h3 {
+      font-size: 1.6rem;
+    }
+
+    /* LIBERATION SECTION */
+    .liberation-container {
+      padding: 20px;
+      text-align: center;
+    }
+    .liberation-features {
+      flex-direction: column;
+      gap: 20px;
+    }
+    .liberation-box {
+      padding: 15px;
+    }
+    .liberation-box h4 {
+      font-size: 1.2rem;
+    }
+
+    /* MIND MASTERY SECTION */
+    .mind-mastery-container {
+      padding: 20px;
+      text-align: center;
+    }
+    .mind-cards {
+      flex-direction: column;
+      gap: 20px;
+    }
+    .mind-card {
+      padding: 15px;
+    }
+
+    /* WELLNESS SECTION */
+    .wellness-container {
+      padding: 20px;
+      text-align: center;
+    }
+    .wellness-cards {
+      flex-direction: column;
+      gap: 20px;
+    }
+    .wellness-card {
+      padding: 15px;
+    }
+    .wellness-badges {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .wellness-badges .badge {
+      margin: 5px 8px;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+    }
+
+    /* PERSONAL RECOMMENDATIONS SECTION */
+    .personal-recommendations-container {
+      padding: 20px;
+      text-align: center;
+    }
+    .recommendation-category {
+      margin-bottom: 25px;
+      padding: 10px;
+    }
+    .recommendation-category h4 {
+      font-size: 1.2rem;
+    }
+    .recommendation-category p {
+      font-size: 0.9rem;
+    }
+    .btn.explore-btn {
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto 15px;
+      display: block;
+    }
+
+    /* TRUSTED PARTNERSHIPS SECTION */
+    .trusted-partnerships-container {
+      padding: 20px;
+      text-align: center;
+    }
+    .partnership-category {
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+    .btn.explore-btn {
+      max-width: 300px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* JOIN THE NIGHT SHIFT SECTION */
+    .join-container {
+      padding: 20px;
+      text-align: center;
+    }
+    .join-form input[type="email"] {
+      width: 100%;
+      max-width: 320px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .join-form button {
+      width: 100%;
+      max-width: 320px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+    .join-stats {
+      flex-direction: column;
+      gap: 15px;
+    }
+    .join-stats div h3 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
 <!-- HERO SECTION -->
 <section class="hero-section">
   <div class="hero-overlay">

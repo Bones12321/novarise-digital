@@ -1,5 +1,98 @@
 <footer class="site-footer">
-  <div class="footer-top">
+
+  <style>
+    /* Mobile Responsive Footer */
+    @media (max-width: 768px) {
+      .footer-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .footer-logo-container {
+        max-width: 90%;
+      }
+
+      .footer-logo {
+        max-width: 150px;
+        height: auto;
+        margin-bottom: 10px;
+      }
+
+      .footer-tagline {
+        font-size: 0.9rem;
+        line-height: 1.3;
+      }
+
+      .footer-navigation {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .footer-navigation h4 {
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+
+      .footer-navigation ul {
+        padding: 0;
+        list-style: none;
+      }
+
+      .footer-navigation ul li {
+        margin-bottom: 8px;
+      }
+
+      .footer-navigation ul li a {
+        font-size: 1rem;
+      }
+
+      .footer-cta {
+        max-width: 320px;
+      }
+
+      .footer-cta h4 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+      }
+
+      .footer-cta p {
+        font-size: 1rem;
+        margin-bottom: 12px;
+      }
+
+      .btn.btn-primary {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding: 15px 20px;
+      }
+
+      .footer-bottom p {
+        font-size: 0.9rem;
+      }
+
+      .footer-bottom-links {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        font-size: 0.9rem;
+      }
+
+      .footer-bottom-links a {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+
+  <div class="footer-top d-flex justify-content-between align-items-start">
     <div class="footer-logo-container">
       <img src="/images/logo.png" alt="NovaRise" class="footer-logo" />
       <p class="footer-tagline">
@@ -15,7 +108,7 @@
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
         <li><a href="/faq">FAQ</a></li>
-        <li><a href="/terms">Terms of Service</a></li> <!-- Updated here -->
+        <li><a href="/terms">Terms of Service</a></li>
       </ul>
     </nav>
 
@@ -26,11 +119,11 @@
     </div>
   </div>
 
-  <div class="footer-bottom">
+  <div class="footer-bottom d-flex justify-content-between align-items-center">
     <p>© 2025 NovaRise. All rights reserved. Built for the night builders and dream chasers.</p>
-    <div class="footer-bottom-links">
+    <div class="footer-bottom-links d-flex gap-3 align-items-center">
       <span>Always building</span>
-      <a href="/terms">Terms</a> <!-- Updated here -->
+      <a href="/terms">Terms</a>
     </div>
   </div>
 </footer>

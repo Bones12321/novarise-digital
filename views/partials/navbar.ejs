@@ -1,4 +1,51 @@
 <nav class="navbar navbar-dark bg-dark sticky-top">
+  <style>
+    /* Responsive tweaks for navbar */
+    @media (max-width: 768px) {
+      .navbar-brand {
+        font-size: 1.1rem;
+        white-space: nowrap;
+      }
+
+      .navbar-brand img {
+        height: 32px !important;
+        margin-right: 6px !important;
+      }
+
+      /* Profile circle smaller on mobile */
+      #profileDropdown {
+        width: 32px !important;
+        height: 32px !important;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      /* Cart icon and badge adjustments */
+      a.position-relative.me-3.text-white {
+        margin-right: 12px !important;
+      }
+
+      #cart-count {
+        font-size: 0.7rem !important;
+        padding: 0.15em 0.4em !important;
+      }
+
+      /* Collapse menu items vertical and spaced */
+      .navbar-nav.flex-column.flex-grow-1 {
+        padding-left: 0;
+      }
+
+      .navbar-nav.flex-column.flex-grow-1 > li {
+        margin-bottom: 0.5rem;
+      }
+
+      .navbar-nav.flex-column.flex-grow-1 > li > a.nav-link {
+        font-size: 1rem;
+        padding-left: 0;
+      }
+    }
+  </style>
+
   <div class="container-fluid px-3 d-flex justify-content-between align-items-center">
 
     <!-- Hamburger toggle button -->
@@ -9,8 +56,8 @@
 
     <!-- Brand / logo -->
     <a class="navbar-brand d-flex align-items-center" href="/">
-      <img src="/images/logo.png" alt="Beyond 9 to 5 Logo" style="height: 40px; margin-right: 10px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.5);" />
-      Beyond the 9 to 5
+      <img src="/images/logo.png" alt="NovaRise" style="height: 40px; margin-right: 10px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.5);" />
+      NovaRise
     </a>
 
     <!-- Cart Icon and Profile Icon container -->
