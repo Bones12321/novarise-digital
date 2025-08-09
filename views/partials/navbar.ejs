@@ -3,13 +3,18 @@
     /* Responsive tweaks for navbar */
     @media (max-width: 768px) {
       .navbar-brand {
-        font-size: 1.1rem;
+        font-size: 0.7rem; /* smaller font to fit better */
         white-space: nowrap;
+        flex-shrink: 1; /* allow shrinking */
+        max-width: 40%; /* limit brand width */
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .navbar-brand img {
         height: 32px !important;
         margin-right: 6px !important;
+        flex-shrink: 0;
       }
 
       /* Profile circle smaller on mobile */
@@ -17,17 +22,25 @@
         width: 32px !important;
         height: 32px !important;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.8rem;
+        flex-shrink: 0;
       }
 
       /* Cart icon and badge adjustments */
       a.position-relative.me-3.text-white {
-        margin-right: 12px !important;
+        margin-right: 8px !important;
+        flex-shrink: 0;
       }
 
       #cart-count {
         font-size: 0.7rem !important;
         padding: 0.15em 0.4em !important;
+      }
+
+      /* Container for cart and profile icons */
+      .d-flex.align-items-center {
+        gap: 8px; /* space between cart and profile */
+        flex-shrink: 0;
       }
 
       /* Collapse menu items vertical and spaced */
@@ -49,6 +62,18 @@
       .collapse.navbar-collapse {
         width: max-content !important;
         min-width: 220px; /* keep min-width from desktop for smaller menus */
+        flex-shrink: 1;
+      }
+
+      /* Main container adjustment */
+      .container-fluid.px-3.d-flex.justify-content-between.align-items-center {
+        flex-wrap: nowrap;
+        gap: 8px;
+      }
+
+      /* Hamburger button shrink */
+      .navbar-toggler {
+        flex-shrink: 0;
       }
     }
   </style>
