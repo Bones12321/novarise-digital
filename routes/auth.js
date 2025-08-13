@@ -210,7 +210,7 @@ router.post('/login', async (req, res, next) => {
       }
 
       // Redirect based on role
-      const redirectTo = req.session.returnTo || (user.role === 'admin' ? '/admin/dashboard' : '/dashboard');
+      const redirectTo = req.session.returnTo || (user.role === 'admin' ? '/admin-dashboard' : '/dashboard');
       delete req.session.returnTo;
       res.redirect(redirectTo);
     });

@@ -89,8 +89,14 @@ app.use('/checkout', require('./routes/checkout'));
 app.use('/auth', require('./routes/auth'));
 app.use('/dashboard', require('./routes/dashboard'));
 
-// Admin routes
-app.use('/admin', require('./routes/admin'));
+// Admin dashboard route (renders admin-dashboard.ejs)
+app.get('/admin-dashboard', (req, res) => {
+  if (!req.user || req.user.role !== 'admin') {
+    req.flash('error_msg', 'You must be logged in as admin to view this page');
+    return res.redirect('/auth/login');
+  }
+  res.render('admin-dashboard', { user: req.user, cart: req.session.cart || [] });
+});
 
 // Start server
 const PORT = process.env.PORT || 3000;
