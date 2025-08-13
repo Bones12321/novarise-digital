@@ -163,12 +163,12 @@ router.get('/login', (req, res) => {
   res.render('login', { title: 'Login', cart: req.session.cart || [] });
 });
 
-// POST: Login with cart merge and redirect to intended page
+// POST: Login with cart merge and role-based redirect
 router.post('/login', async (req, res, next) => {
   let email = '';
   if (req.body && typeof req.body.email === 'string') {
     email = req.body.email.toLowerCase();
-    req.body.email = email; // update original req.body
+    req.body.email = email;
   }
 
   if (!email) {
@@ -189,44 +189,27 @@ router.post('/login', async (req, res, next) => {
   }
 
   passport.authenticate('local', (err, user, info) => {
-    console.log('📥 Login attempt for:', email);
-
-    if (err) {
-      console.error('❌ Passport error:', err);
-      return next(err);
-    }
-
+    if (err) return next(err);
     if (!user) {
-      console.warn('⚠️ Login failed:', info?.message);
       req.flash('error', info?.message || 'Login failed');
       return res.redirect('/auth/login');
     }
 
     req.logIn(user, (err) => {
-      if (err) {
-        console.error('❌ Login session error:', err);
-        return next(err);
-      }
+      if (err) return next(err);
 
-      // Merge carts: merge temporary saved cart with current session cart
-      if (!req.session.cart) {
-        req.session.cart = [];
-      }
+      // Merge carts
+      if (!req.session.cart) req.session.cart = [];
       if (req.session.tempCart && req.session.tempCart.length) {
-        // merge by unique product title, you can change criteria
         const merged = [...req.session.cart];
         req.session.tempCart.forEach(item => {
-          if (!merged.find(p => p.title === item.title)) {
-            merged.push(item);
-          }
+          if (!merged.find(p => p.title === item.title)) merged.push(item);
         });
         req.session.cart = merged;
         delete req.session.tempCart;
       }
 
-      console.log('✅ Login success:', user.email, '| Role:', user.role);
-
-      // Redirect to intended page or default dashboard/admin dashboard
+      // Redirect based on role
       const redirectTo = req.session.returnTo || (user.role === 'admin' ? '/admin/dashboard' : '/dashboard');
       delete req.session.returnTo;
       res.redirect(redirectTo);

@@ -29,11 +29,11 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Middleware to parse JSON and urlencoded bodies
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));  // changed to true for form parsing
+app.use(express.urlencoded({ extended: true }));
 
 // Setup session
 app.use(session({
-  secret: 'your_secret_key_here', // Change to a strong secret in production!
+  secret: 'your_secret_key_here',
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1 day
@@ -56,7 +56,7 @@ app.use(flash());
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg'); 
   res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error'); // Passport uses this on login failure
+  res.locals.error = req.flash('error');
   next();
 });
 
@@ -72,7 +72,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Password entry page - must be before passwordProtect middleware
+// Password entry page
 app.use('/password', require('./routes/password'));
 
 // Forgot and Reset Password Routes
@@ -82,12 +82,15 @@ app.use('/reset-password', require('./routes/resetPassword'));
 // Password protection middleware
 app.use(passwordProtect);
 
-// Main routes including contact POST handler
+// Main routes
 app.use('/', require('./routes/index'));
 app.use('/cart', require('./routes/cart'));
 app.use('/checkout', require('./routes/checkout'));
 app.use('/auth', require('./routes/auth'));
 app.use('/dashboard', require('./routes/dashboard'));
+
+// Admin routes
+app.use('/admin', require('./routes/admin'));
 
 // Start server
 const PORT = process.env.PORT || 3000;

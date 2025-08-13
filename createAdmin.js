@@ -1,45 +1,54 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const User = require('./models/User'); // Adjust if needed
+// createAdmin.js
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const dotenv = require("dotenv");
 
-// 🔐 Admin credentials
-const adminData = {
-  name: 'Admin',
-  email: 'novariseteam@gmail.com',
-  password: 'Admin123!', // You can change this if needed
-  role: 'admin'
-};
+dotenv.config();
 
-// 📦 Your MongoDB connection string
-const MONGO_URI = 'mongodb://localhost:27017/novariseDB'; // Change if your DB name differs
+const User = require("./models/User"); // Adjust path if needed
 
-async function createAdmin() {
-  try {
-    await mongoose.connect(MONGO_URI);
-    console.log('🟢 Connected to MongoDB');
+// Admin credentials
+const adminEmail = "novariseteam@gmail.com";
+const adminPassword = "Flaffie12."; // Change before deploying
+const adminName = "Admin User";
 
-    const existingAdmin = await User.findOne({ email: adminData.email });
-    if (existingAdmin) {
-      console.log('⚠️ Admin user already exists. Deleting and recreating...');
-      await User.deleteOne({ email: adminData.email });
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(async () => {
+    console.log("🟢 Connected to MongoDB");
+
+    try {
+      // Check if admin exists
+      const existingAdmin = await User.findOne({ email: adminEmail });
+      if (existingAdmin) {
+        console.log("⚠️ Admin user already exists. Deleting and recreating...");
+        await User.deleteOne({ email: adminEmail });
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(adminPassword, 10);
+
+      // Create admin user
+      const adminUser = new User({
+        name: adminName,
+        email: adminEmail,
+        password: hashedPassword,
+        role: "admin",
+      });
+
+      await adminUser.save(); // Wait until saved in DB
+
+      console.log("✅ Admin user created successfully!");
+    } catch (error) {
+      console.error("❌ Error creating admin user:", error);
+    } finally {
+      await mongoose.disconnect();
+      console.log("🔌 Disconnected from MongoDB");
     }
-
-    const hashedPassword = await bcrypt.hash(adminData.password, 10);
-    const newAdmin = new User({
-      name: adminData.name,
-      email: adminData.email.toLowerCase(),
-      password: hashedPassword,
-      role: adminData.role
-    });
-
-    await newAdmin.save();
-    console.log('✅ Admin user created successfully!');
-  } catch (err) {
-    console.error('❌ Error creating admin:', err);
-  } finally {
-    await mongoose.connection.close();
-    process.exit();
-  }
-}
-
-createAdmin();
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err);
+  });

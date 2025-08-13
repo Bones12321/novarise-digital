@@ -1,73 +1,745 @@
 <%- include('partials/header', { title: 'Admin Dashboard', user: user, cart: cart }) %>
 
 <style>
-  html, body {
-    height: 100%;
-    margin: 0;
+  :root{
+    --sidebar-w: 260px;
   }
 
   body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
     background: url('/images/logo.png') no-repeat center center fixed;
     background-size: cover;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Outfit', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     color: #fff;
   }
 
-  main {
-    flex: 1; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background: rgba(0,0,0,0.5);
+  .admin-shell{
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    min-height: calc(100vh - 56px); /* minus site navbar */
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
   }
 
-  .dashboard-container {
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 40px;
-    max-width: 600px;
-    width: 100%;
-    text-align: center;
+  /* Sidebar */
+  .admin-sidebar{
+    position: sticky;
+    top: 56px; /* below site navbar */
+    height: calc(100vh - 56px);
+    background: rgba(15,15,15,0.9);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    padding: 18px 14px;
+    overflow-y: auto;
   }
-
-  .dashboard-container h1 {
+  .admin-brand{
     font-weight: 800;
-    font-size: 2.5rem;
-    margin-bottom: 15px;
+    font-size: 1.1rem;
+    letter-spacing: .5px;
+    margin: 2px 6px 14px;
+    opacity: .9;
   }
-
-  .dashboard-container p {
-    font-size: 1.2rem;
-    margin-bottom: 25px;
+  .admin-nav .nav-link{
+    color: #eaeaea;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    transition: background .2s, transform .06s;
+    white-space: nowrap;
   }
-
-  .btn-logout {
-    display: inline-block;
-    padding: 12px 30px;
-    background-color: #222;
-    color: white;
-    font-weight: 600;
-    border-radius: 8px;
+  .admin-nav .nav-link.active,
+  .admin-nav .nav-link:hover{
+    background: rgba(255,255,255,0.08);
+    color: #fff;
     text-decoration: none;
-    transition: background-color 0.3s ease;
+  }
+  .admin-nav .badge{
+    margin-left: auto;
   }
 
-  .btn-logout:hover {
-    background-color: #444;
+  /* Content */
+  .admin-content{
+    padding: 24px;
+  }
+  .glass{
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+  }
+  .section{
+    display: none;
+  }
+  .section.active{
+    display: block;
+  }
+
+  /* Cards */
+  .stat-card{
+    padding: 16px;
+    border-radius: 14px;
+  }
+  .stat-value{
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+  .stat-label{
+    font-size: .9rem;
+    opacity: .85;
+  }
+
+  /* Tables */
+  .table.glass-table{
+    color: #f2f2f2;
+  }
+  .table.glass-table th{
+    background: rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+  }
+  .table.glass-table td{
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.08);
+    vertical-align: middle;
+  }
+
+  /* Forms */
+  .form-control, .form-select{
+    background: rgba(255,255,255,0.12) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    color: #fff !important;
+  }
+  .form-control::placeholder{
+    color: rgba(255,255,255,0.7) !important;
+  }
+  .form-text{
+    color: rgba(255,255,255,0.8);
+  }
+  .btn-dark{
+    background:#222; border-color:#222;
+  }
+
+  /* Top content bar (mobile toggle lives here) */
+  .content-topbar{
+    display: none;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px){
+    .admin-shell{
+      grid-template-columns: 1fr;
+    }
+    .admin-sidebar{
+      position: fixed;
+      top: 56px;
+      left: 0;
+      width: 86vw;
+      max-width: 320px;
+      transform: translateX(-105%);
+      transition: transform .25s ease;
+      z-index: 1050;
+      border-right: 1px solid rgba(255,255,255,0.15);
+      border-top-right-radius: 14px;
+      border-bottom-right-radius: 14px;
+    }
+    .admin-sidebar.open{
+      transform: translateX(0);
+    }
+    .content-topbar{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .content-topbar .brand-mini{
+      font-weight: 800;
+      opacity: .9;
+      font-size: 1.05rem;
+    }
+
+    /* Make typography/controls a bit smaller on mobile */
+    .admin-content, .admin-content *{
+      font-size: .95rem;
+    }
+    h1.h3{
+      font-size: 1.25rem;
+    }
+    .stat-value{
+      font-size: 1.35rem;
+    }
+    .btn{
+      padding: .45rem .7rem;
+      font-size: .95rem;
+    }
+    .table{
+      font-size: .92rem;
+    }
+    .table-responsive{
+      -webkit-overflow-scrolling: touch;
+    }
   }
 </style>
 
-<main>
-  <div class="dashboard-container">
-    <h1>Welcome, <%= user.name %>!</h1>
-    <p>This is your admin dashboard to manage users, view sales stats, approve products, and oversee payouts.</p>
-    <a href="/auth/logout" class="btn-logout">Logout</a>
-  </div>
-</main>
+<div class="admin-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar glass" id="adminSidebar" aria-label="Admin menu">
+    <div class="admin-brand">Admin • NovaRise</div>
+    <nav class="admin-nav nav flex-column">
+      <a href="#overview" class="nav-link active" data-section="overview">
+        <i class="bi bi-speedometer2"></i> Overview
+      </a>
+      <a href="#users" class="nav-link" data-section="users">
+        <i class="bi bi-people-fill"></i> Manage Users
+        <% if (typeof userAlerts !== 'undefined' && userAlerts > 0) { %>
+          <span class="badge bg-danger"><%= userAlerts %></span>
+        <% } %>
+      </a>
+      <a href="#sales" class="nav-link" data-section="sales">
+        <i class="bi bi-graph-up"></i> Sales & Analytics
+      </a>
+      <a href="#approvals" class="nav-link" data-section="approvals">
+        <i class="bi bi-check2-circle"></i> Product Approvals
+        <% if (typeof pendingCount !== 'undefined' && pendingCount > 0) { %>
+          <span class="badge bg-warning text-dark"><%= pendingCount %></span>
+        <% } %>
+      </a>
+      <a href="#payouts" class="nav-link" data-section="payouts">
+        <i class="bi bi-cash-coin"></i> Payouts
+      </a>
+      <a href="#catalog" class="nav-link" data-section="catalog">
+        <i class="bi bi-bag-check-fill"></i> Manage Catalog
+      </a>
+      <a href="#uploads" class="nav-link" data-section="uploads">
+        <i class="bi bi-cloud-arrow-up-fill"></i> Quick Upload
+      </a>
+      <a href="#settings" class="nav-link" data-section="settings">
+        <i class="bi bi-gear-fill"></i> Settings
+      </a>
+    </nav>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="admin-content">
+
+    <!-- Mobile topbar -->
+    <div class="content-topbar">
+      <button class="btn btn-outline-light" id="sidebarToggle" aria-controls="adminSidebar" aria-expanded="false">
+        <i class="bi bi-list"></i>
+      </button>
+      <div class="brand-mini">Admin Dashboard</div>
+      <a href="/auth/logout" class="btn btn-dark">Logout</a>
+    </div>
+
+    <!-- Overview -->
+    <section id="overview" class="section active">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h1 class="h3 mb-0">Overview</h1>
+        <a href="/auth/logout" class="btn btn-dark d-none d-md-inline-flex">Logout</a>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="glass stat-card h-100">
+            <div class="stat-value">
+              $<%= (stats?.totalRevenue || 0).toLocaleString() %>
+            </div>
+            <div class="stat-label">Total Revenue</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="glass stat-card h-100">
+            <div class="stat-value"><%= stats?.orders || 0 %></div>
+            <div class="stat-label">Orders</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="glass stat-card h-100">
+            <div class="stat-value"><%= stats?.users || 0 %></div>
+            <div class="stat-label">Users</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="glass stat-card h-100">
+            <div class="stat-value"><%= pendingCount || 0 %></div>
+            <div class="stat-label">Pending Products</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass mt-3 p-3">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <strong>Revenue by Category (Last 30d)</strong>
+          <small class="text-white-50">Tap to scroll on mobile ⟶</small>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover glass-table mb-0">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Revenue</th>
+                <th>Orders</th>
+                <th>Top Product</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% (stats?.byCategory || []).forEach(c => { %>
+                <tr>
+                  <td><%= c.name %></td>
+                  <td>$<%= c.revenue.toLocaleString() %></td>
+                  <td><%= c.orders %></td>
+                  <td><%= c.topProduct %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Manage Users -->
+    <section id="users" class="section">
+      <h1 class="h3 mb-3">Manage Users</h1>
+      <div class="glass p-3">
+        <div class="table-responsive">
+          <table class="table glass-table align-middle">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% (users || []).forEach(u => { %>
+                <tr>
+                  <td><%= u.name %></td>
+                  <td><%= u.email %></td>
+                  <td><span class="badge <%= u.role==='admin'?'bg-warning text-dark':'bg-secondary' %>"><%= u.role %></span></td>
+                  <td>
+                    <span class="badge <%= u.suspended ? 'bg-danger' : 'bg-success' %>">
+                      <%= u.suspended ? 'Suspended' : 'Active' %>
+                    </span>
+                  </td>
+                  <td class="text-end">
+                    <form action="/admin/users/<%= u.id %>/<%= u.suspended ? 'unsuspend' : 'suspend' %>" method="POST" class="d-inline">
+                      <button class="btn btn-sm <%= u.suspended ? 'btn-success' : 'btn-warning' %>">
+                        <%= u.suspended ? 'Unsuspend' : 'Suspend' %>
+                      </button>
+                    </form>
+                    <form action="/admin/users/<%= u.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this user?');">
+                      <button class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sales & Analytics -->
+    <section id="sales" class="section">
+      <h1 class="h3 mb-3">Sales & Analytics</h1>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <div class="glass p-3">
+            <strong class="d-block mb-2">Affiliate Performance</strong>
+            <div class="table-responsive">
+              <table class="table glass-table">
+                <thead>
+                  <tr>
+                    <th>Affiliate</th>
+                    <th>Clicks</th>
+                    <th>Sales</th>
+                    <th>Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <% (stats?.affiliates || []).forEach(a => { %>
+                  <tr>
+                    <td><%= a.name %></td>
+                    <td><%= a.clicks %></td>
+                    <td><%= a.sales %></td>
+                    <td>$<%= a.revenue.toLocaleString() %></td>
+                  </tr>
+                <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="glass p-3">
+            <strong class="d-block mb-2">Seller Performance</strong>
+            <div class="table-responsive">
+              <table class="table glass-table">
+                <thead>
+                  <tr>
+                    <th>Seller</th>
+                    <th>Products</th>
+                    <th>Sales</th>
+                    <th>Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <% (stats?.sellers || []).forEach(s => { %>
+                  <tr>
+                    <td><%= s.name %></td>
+                    <td><%= s.products %></td>
+                    <td><%= s.sales %></td>
+                    <td>$<%= s.revenue.toLocaleString() %></td>
+                  </tr>
+                <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="glass p-3">
+            <strong class="d-block mb-2">Recent Orders</strong>
+            <div class="table-responsive">
+              <table class="table glass-table">
+                <thead>
+                  <tr>
+                    <th>Order #</th>
+                    <th>Buyer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% (stats?.ordersList || []).forEach(o => { %>
+                    <tr>
+                      <td>#<%= o.id %></td>
+                      <td><%= o.buyer %></td>
+                      <td>$<%= o.total.toFixed(2) %></td>
+                      <td><span class="badge <%= o.status==='Paid'?'bg-success':'bg-secondary' %>"><%= o.status %></span></td>
+                      <td><%= o.date %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Approvals -->
+    <section id="approvals" class="section">
+      <h1 class="h3 mb-3">Product Approvals</h1>
+      <div class="glass p-3">
+        <div class="row g-3">
+          <% (pendingProducts || []).forEach(p => { %>
+            <div class="col-12 col-md-6">
+              <div class="glass p-3 h-100">
+                <div class="d-flex gap-3">
+                  <img src="<%= p.image || '/images/default-product.jpg' %>" alt="" style="width:92px; height:92px; object-fit:cover; border-radius:10px;">
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between">
+                      <strong><%= p.title %></strong>
+                      <span class="badge bg-info text-dark">$<%= p.price.toFixed(2) %></span>
+                    </div>
+                    <small class="text-white-50 d-block mb-2">Seller: <%= p.sellerName %> • Category: <%= p.category %></small>
+                    <div class="d-flex gap-2">
+                      <form action="/admin/approvals/<%= p.id %>/approve" method="POST">
+                        <button class="btn btn-success btn-sm"><i class="bi bi-check2"></i> Approve</button>
+                      </form>
+                      <form action="/admin/approvals/<%= p.id %>/reject" method="POST" onsubmit="return confirm('Reject this product?');">
+                        <button class="btn btn-danger btn-sm"><i class="bi bi-x-lg"></i> Reject</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+          <% if (!pendingProducts || pendingProducts.length === 0) { %>
+            <div class="col-12">
+              <div class="text-center text-white-50 py-4">No pending products 🎉</div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </section>
+
+    <!-- Payouts -->
+    <section id="payouts" class="section">
+      <h1 class="h3 mb-3">Payouts</h1>
+      <div class="glass p-3">
+        <div class="table-responsive">
+          <table class="table glass-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Requested</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% (payouts || []).forEach(p => { %>
+                <tr>
+                  <td><%= p.type %></td>
+                  <td><%= p.recipient %></td>
+                  <td>$<%= p.amount.toFixed(2) %></td>
+                  <td><span class="badge <%= p.status==='Paid'?'bg-success':'bg-warning text-dark' %>"><%= p.status %></span></td>
+                  <td><%= p.requestedAt %></td>
+                  <td class="text-end">
+                    <% if (p.status !== 'Paid') { %>
+                      <form action="/admin/payouts/<%= p.id %>/mark-paid" method="POST" class="d-inline">
+                        <button class="btn btn-sm btn-success">Mark Paid</button>
+                      </form>
+                    <% } %>
+                    <form action="/admin/payouts/<%= p.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this payout record?');">
+                      <button class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Manage Catalog (Sections 1–4) -->
+    <section id="catalog" class="section">
+      <h1 class="h3 mb-3">Manage Catalog (Sections 1–4)</h1>
+      <div class="glass p-3 mb-3">
+        <form action="/admin/catalog/products/create" method="POST" enctype="multipart/form-data" class="row g-2">
+          <div class="col-12 col-md-3">
+            <label class="form-label">Section</label>
+            <select name="section" class="form-select" required>
+              <option value="1">Section 1 – Guide to Freedom</option>
+              <option value="2">Section 2 – Mental Strength & Health</option>
+              <option value="3">Section 3 – Physical Health</option>
+              <option value="4">Section 4 – Recommended Products</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" placeholder="Product title" required>
+          </div>
+          <div class="col-6 col-md-2">
+            <label class="form-label">Price ($)</label>
+            <input type="number" step="0.01" min="0" name="price" class="form-control" required>
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label">Cover Image</label>
+            <input type="file" name="image" class="form-control" accept="image/*">
+            <div class="form-text">Best: 1200×800 JPG/PNG</div>
+          </div>
+          <div class="col-12 text-end">
+            <button class="btn btn-success"><i class="bi bi-plus-circle"></i> Add Product</button>
+          </div>
+        </form>
+      </div>
+
+      <% const sections = productsBySection || { 1:[],2:[],3:[],4:[] }; %>
+      <% const sectionNames = {1:'Guide to Freedom',2:'Mental Strength & Health',3:'Physical Health',4:'Recommended Products'}; %>
+
+      <% [1,2,3,4].forEach(sec => { const list = sections[sec] || []; %>
+        <div class="glass p-3 mb-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <strong>Section <%= sec %> — <%= sectionNames[sec] %></strong>
+            <small class="text-white-50"><%= list.length %> items</small>
+          </div>
+          <div class="table-responsive mt-2">
+            <table class="table glass-table align-middle">
+              <thead>
+                <tr>
+                  <th style="width:72px;">Cover</th>
+                  <th>Title</th>
+                  <th>Price</th>
+                  <th>Updated</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (list.length === 0) { %>
+                  <tr><td colspan="5" class="text-center text-white-50">No products yet.</td></tr>
+                <% } %>
+                <% list.forEach(p => { %>
+                  <tr>
+                    <td>
+                      <img src="<%= p.image || '/images/default-product.jpg' %>" alt="" style="width:64px; height:48px; object-fit:cover; border-radius:8px;">
+                    </td>
+                    <td><%= p.title %></td>
+                    <td>$<%= p.price.toFixed(2) %></td>
+                    <td><small class="text-white-50"><%= p.updatedAt %></small></td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-outline-light" data-bs-toggle="collapse" data-bs-target="#edit_<%= p.id %>">
+                        Edit
+                      </button>
+                      <form action="/admin/catalog/products/<%= p.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this product?');">
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                      </form>
+                    </td>
+                  </tr>
+                  <tr class="collapse" id="edit_<%= p.id %>">
+                    <td colspan="5">
+                      <form action="/admin/catalog/products/<%= p.id %>/update" method="POST" enctype="multipart/form-data" class="row g-2">
+                        <div class="col-12 col-md-4">
+                          <label class="form-label">Title</label>
+                          <input type="text" name="title" class="form-control" value="<%= p.title %>" required>
+                        </div>
+                        <div class="col-6 col-md-2">
+                          <label class="form-label">Price ($)</label>
+                          <input type="number" step="0.01" min="0" name="price" class="form-control" value="<%= p.price %>" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                          <label class="form-label">Replace Cover</label>
+                          <input type="file" name="image" class="form-control" accept="image/*">
+                          <div class="form-text">Leave empty to keep current</div>
+                        </div>
+                        <div class="col-12 col-md-2 d-flex align-items-end">
+                          <button class="btn btn-success w-100">Save</button>
+                        </div>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% }) %>
+    </section>
+
+    <!-- Quick Upload (for marketplace submissions if admin wants to add fast) -->
+    <section id="uploads" class="section">
+      <h1 class="h3 mb-3">Quick Upload</h1>
+      <div class="glass p-3">
+        <form action="/admin/uploads/marketplace" method="POST" enctype="multipart/form-data" class="row g-2">
+          <div class="col-12">
+            <label class="form-label">Product Title</label>
+            <input type="text" name="title" class="form-control" required placeholder="e.g. Focus Toolkit">
+          </div>
+          <div class="col-6 col-md-4">
+            <label class="form-label">Price ($)</label>
+            <input type="number" name="price" min="0" step="0.01" class="form-control" required>
+          </div>
+          <div class="col-6 col-md-4">
+            <label class="form-label">Category</label>
+            <select name="category" class="form-select" required>
+              <option value="Guide to Freedom">Guide to Freedom</option>
+              <option value="Mental Strength & Health">Mental Strength & Health</option>
+              <option value="Physical Health">Physical Health</option>
+              <option value="Recommended">Recommended</option>
+              <option value="Marketplace">Marketplace</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label">Cover Image</label>
+            <input type="file" name="image" class="form-control" accept="image/*" required>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Short Description</label>
+            <textarea name="description" rows="3" class="form-control" placeholder="What’s inside?"></textarea>
+          </div>
+          <div class="col-12 text-end">
+            <button class="btn btn-success"><i class="bi bi-cloud-arrow-up"></i> Upload</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Settings / Misc -->
+    <section id="settings" class="section">
+      <h1 class="h3 mb-3">Settings</h1>
+      <div class="glass p-3">
+        <form action="/admin/settings/save" method="POST" class="row g-2">
+          <div class="col-12 col-md-6">
+            <label class="form-label">Storefront Status</label>
+            <select name="store_status" class="form-select">
+              <option value="open" <%= (settings?.store_status==='open'?'selected':'') %>>Open</option>
+              <option value="maintenance" <%= (settings?.store_status==='maintenance'?'selected':'') %>>Maintenance</option>
+              <option value="closed" <%= (settings?.store_status==='closed'?'selected':'') %>>Closed</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Default Affiliate %</label>
+            <input type="number" name="affiliate_pct" step="0.1" min="0" max="100" class="form-control" value="<%= settings?.affiliate_pct ?? 20 %>">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Admin Note</label>
+            <textarea name="admin_note" rows="3" class="form-control" placeholder="Shown only in dashboard…"><%= settings?.admin_note || '' %></textarea>
+          </div>
+          <div class="col-12 text-end">
+            <button class="btn btn-success">Save Settings</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
 
 <%- include('partials/footer') %>
+
+<!-- (Optional) Chart.js for future charts, safe to keep even if unused -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<script>
+  // Sidebar toggle (mobile)
+  const sidebar = document.getElementById('adminSidebar');
+  const toggleBtn = document.getElementById('sidebarToggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const open = sidebar.classList.toggle('open');
+      toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+
+  // Close sidebar when clicking outside (mobile)
+  document.addEventListener('click', (e) => {
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      if (!sidebar.contains(e.target) && !toggleBtn?.contains(e.target)) {
+        sidebar.classList.remove('open');
+        toggleBtn?.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+
+  // Section navigation
+  const links = document.querySelectorAll('.admin-nav .nav-link');
+  const sections = document.querySelectorAll('.section');
+  function showSection(id){
+    sections.forEach(s => s.classList.toggle('active', s.id === id));
+    links.forEach(l => l.classList.toggle('active', l.dataset.section === id));
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      sidebar.classList.remove('open');
+      toggleBtn?.setAttribute('aria-expanded', 'false');
+    }
+    // Persist last tab
+    try { localStorage.setItem('admin:lastTab', id); } catch(e){}
+  }
+  links.forEach(l => {
+    l.addEventListener('click', (e) => {
+      e.preventDefault();
+      showSection(l.dataset.section);
+    });
+  });
+
+  // Restore last tab
+  (function(){
+    try {
+      const last = localStorage.getItem('admin:lastTab');
+      if (last && document.getElementById(last)) showSection(last);
+    } catch(e){}
+  })();
+</script>
