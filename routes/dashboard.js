@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Product = require('../models/Product');
-// const Order = require('../models/Order'); // uncomment if you have an Order model
-// const Payout = require('../models/Payout'); // uncomment if you have a model
+const Order = require('../models/Order'); // uncomment if you have an Order model
+// const Payout = require('../models/Payout'); // uncomment if you have a Payout model
 
 // Middleware to protect routes
 function ensureAuthenticated(req, res, next) {
@@ -27,7 +27,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
   return res.redirect('/dashboard/client');
 });
 
-// Admin dashboard route
+// ------------------- ADMIN DASHBOARD -------------------
 router.get('/admin', ensureAuthenticated, checkRole('admin'), async (req, res) => {
   try {
     const users = await User.find().lean() || [];
@@ -84,7 +84,7 @@ router.get('/admin', ensureAuthenticated, checkRole('admin'), async (req, res) =
   }
 });
 
-// Seller dashboard route
+// ------------------- SELLER DASHBOARD -------------------
 router.get('/seller', ensureAuthenticated, checkRole('seller'), async (req, res) => {
   try {
     const user = req.user || {};
@@ -105,7 +105,6 @@ router.get('/seller', ensureAuthenticated, checkRole('seller'), async (req, res)
 
     const pendingProducts = products.filter(p => p.status === 'pending');
 
-    // Compute stats
     const stats = {
       totalRevenue: products.reduce((sum, p) => sum + (p.revenue || 0), 0),
       totalProducts: products.length,
@@ -118,10 +117,10 @@ router.get('/seller', ensureAuthenticated, checkRole('seller'), async (req, res)
       cart: req.session.cart || [],
       affiliate,
       products,
-      myProducts: products,           // for product table
-      pendingProducts,                // for overview card
+      myProducts: products,
+      pendingProducts,
       payouts,
-      orders,                         // for orders table
+      orders,
       stats
     });
   } catch (err) {
@@ -141,13 +140,44 @@ router.get('/seller', ensureAuthenticated, checkRole('seller'), async (req, res)
   }
 });
 
-// Client dashboard route
-router.get('/client', ensureAuthenticated, checkRole('client'), (req, res) => {
-  res.render('client-dashboard', {
-    title: 'Client Dashboard',
-    user: req.user || {},
-    cart: req.session.cart || []
-  });
+// ------------------- CLIENT DASHBOARD -------------------
+router.get('/client', ensureAuthenticated, checkRole('client'), async (req, res) => {
+  try {
+    const user = req.user || {};
+    const cart = req.session.cart || [];
+
+    // Fetch all orders for this client
+    const orders = await Order.find({ buyer: user._id }).lean() || [];
+
+    // Flatten all purchased products
+    const myProducts = orders.map(o => o.products).flat() || [];
+
+    // Client stats
+    const stats = {
+      totalSpent: myProducts.reduce((sum, p) => sum + (p.price || 0), 0),
+      totalOrders: orders.length,
+      totalProducts: myProducts.length
+    };
+
+    res.render('client-dashboard', {
+      title: 'Client Dashboard',
+      user,
+      cart,
+      orders,
+      myProducts,
+      stats // now defined
+    });
+  } catch (err) {
+    console.error('Client dashboard error:', err);
+    res.render('client-dashboard', {
+      title: 'Client Dashboard',
+      user: req.user || {},
+      cart: req.session.cart || [],
+      orders: [],
+      myProducts: [],
+      stats: { totalSpent: 0, totalOrders: 0, totalProducts: 0 } // fallback
+    });
+  }
 });
 
 module.exports = router;

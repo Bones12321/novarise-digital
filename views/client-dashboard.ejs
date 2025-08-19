@@ -1,88 +1,361 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title || 'Client Dashboard' %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <!-- HEADER -->
-  <header>
-    <h1>Welcome, <%= user.name || 'Client' %>!</h1>
-    <nav>
-      <a href="/dashboard">Dashboard</a> |
-      <a href="/auth/logout">Logout</a>
-    </nav>
-  </header>
+<%- include('partials/header', { title: 'Client Dashboard', user: user, cart: cart }) %>
 
-  <main>
-    <!-- PERSONAL DETAILS -->
-    <section>
-      <h2>Your Account Details</h2>
-      <ul>
-        <li><strong>Name:</strong> <%= user.name || 'N/A' %></li>
-        <li><strong>Email:</strong> <%= user.email || 'N/A' %></li>
-        <li><strong>Joined:</strong> <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A' %></li>
-      </ul>
-      <form action="/auth/delete-account" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
-        <button type="submit" style="background-color:red;color:white;padding:8px 16px;border:none;border-radius:4px;cursor:pointer;">
-          Delete Account
-        </button>
-      </form>
+<style>
+  :root{
+    --sidebar-w: 260px;
+  }
+
+  body {
+    background: url('/images/logo.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Outfit', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    color: #fff;
+  }
+
+  .admin-shell{
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    min-height: calc(100vh - 56px);
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+  }
+
+  .admin-sidebar{
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    background: rgba(15,15,15,0.9);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    padding: 18px 14px;
+    overflow-y: auto;
+  }
+  .admin-brand{
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: .5px;
+    margin: 2px 6px 14px;
+    opacity: .9;
+  }
+  .admin-nav .nav-link{
+    color: #eaeaea;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    transition: background .2s, transform .06s;
+    white-space: nowrap;
+  }
+  .admin-nav .nav-link.active,
+  .admin-nav .nav-link:hover{
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .admin-content{
+    padding: 24px;
+  }
+  .glass{
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+  }
+  .section{
+    display: none;
+  }
+  .section.active{
+    display: block;
+  }
+
+  .stat-card{
+    padding: 16px;
+    border-radius: 14px;
+  }
+  .stat-value{
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+  .stat-label{
+    font-size: .9rem;
+    opacity: .85;
+  }
+
+  .table.glass-table{
+    color: #fff; /* make table text white */
+  }
+  .table.glass-table th{
+    background: rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    font-weight: bold; /* bold headers */
+    color: #fff;
+  }
+  .table.glass-table td{
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.08);
+    vertical-align: middle;
+    font-weight: bold; /* make table content bold */
+    color: #fff;
+  }
+
+  .form-control, .form-select{
+    background: rgba(255,255,255,0.12) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    color: #fff !important;
+  }
+  .form-control::placeholder{
+    color: rgba(255,255,255,0.7) !important;
+  }
+  .form-text{
+    color: rgba(255,255,255,0.8);
+  }
+  .btn-dark{
+    background:#222; border-color:#222;
+  }
+
+  .content-topbar{
+    display: none;
+  }
+
+  @media (max-width: 768px){
+    .admin-shell{
+      grid-template-columns: 1fr;
+    }
+    .admin-sidebar{
+      position: fixed;
+      top: 56px;
+      left: 0;
+      width: 86vw;
+      max-width: 320px;
+      transform: translateX(-105%);
+      transition: transform .25s ease;
+      z-index: 1050;
+      border-right: 1px solid rgba(255,255,255,0.15);
+      border-top-right-radius: 14px;
+      border-bottom-right-radius: 14px;
+    }
+    .admin-sidebar.open{
+      transform: translateX(0);
+    }
+    .content-topbar{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .content-topbar .brand-mini{
+      font-weight: 800;
+      opacity: .9;
+      font-size: 1.05rem;
+    }
+
+    .admin-content, .admin-content *{
+      font-size: .95rem;
+    }
+    h1.h3{
+      font-size: 1.25rem;
+    }
+    .stat-value{
+      font-size: 1.35rem;
+    }
+    .btn{
+      padding: .45rem .7rem;
+      font-size: .95rem;
+    }
+    .table{
+      font-size: .92rem;
+    }
+    .table-responsive{
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+</style>
+
+<div class="admin-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar glass" id="adminSidebar" aria-label="Client menu">
+    <div class="admin-brand">Client • NovaRise</div>
+    <nav class="admin-nav nav flex-column">
+      <a href="#overview" class="nav-link active" data-section="overview">
+        <i class="bi bi-speedometer2"></i> Overview
+      </a>
+      <a href="#myproducts" class="nav-link" data-section="myproducts">
+        <i class="bi bi-bag-check-fill"></i> My Purchases
+      </a>
+      <a href="#settings" class="nav-link" data-section="settings">
+        <i class="bi bi-gear-fill"></i> Settings
+      </a>
+    </nav>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="admin-content">
+
+    <!-- Mobile topbar -->
+    <div class="content-topbar">
+      <button class="btn btn-outline-light" id="sidebarToggle" aria-controls="adminSidebar" aria-expanded="false">
+        <i class="bi bi-list"></i>
+      </button>
+      <div class="brand-mini">Client Dashboard</div>
+      <a href="/auth/logout" class="btn btn-dark">Logout</a>
+    </div>
+
+    <!-- Overview -->
+    <section id="overview" class="section active">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h1 class="h3 mb-0">Overview</h1>
+        <a href="/auth/logout" class="btn btn-dark d-none d-md-inline-flex">Logout</a>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="glass stat-card h-100">
+            <div class="stat-value">$<%= (stats?.totalSpent || 0).toLocaleString() %></div>
+            <div class="stat-label">Total Spent</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="glass stat-card h-100">
+            <div class="stat-value"><%= (orders?.length || 0) %></div>
+            <div class="stat-label">Orders</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="glass stat-card h-100">
+            <div class="stat-value"><%= (myProducts?.length || 0) %></div>
+            <div class="stat-label">Products Owned</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="glass stat-card h-100">
+            <div class="stat-value"><%= (cart?.length || 0) %></div>
+            <div class="stat-label">Items in Cart</div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- PURCHASE HISTORY -->
-    <section>
-      <h2>Your Purchase History</h2>
-      <% const clientOrders = orders || []; %>
-      <% if (clientOrders.length === 0) { %>
-        <p>You have no purchases yet.</p>
-      <% } else { %>
-        <table>
-          <thead>
-            <tr>
-              <th>Order #</th>
-              <th>Product</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Download</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% clientOrders.forEach(order => { %>
-              <% if (order.items && order.items.length > 0) { %>
-                <% order.items.forEach(item => { %>
-                  <tr>
-                    <td>#<%= order.id || 'N/A' %></td>
-                    <td><%= item.title || 'Untitled' %></td>
-                    <td><%= order.date ? new Date(order.date).toLocaleDateString() : 'N/A' %></td>
-                    <td><%= order.status || 'Pending' %></td>
-                    <td>
-                      <% if (item.fileUrl) { %>
-                        <a href="<%= item.fileUrl %>" download>Download</a>
-                      <% } else { %>
-                        N/A
-                      <% } %>
-                    </td>
-                  </tr>
-                <% }) %>
-              <% } else { %>
+    <!-- My Purchases -->
+    <section id="myproducts" class="section">
+      <h1 class="h3 mb-3" style="color:#fff; font-weight:bold;">My Purchases</h1>
+      <div class="glass p-3">
+        <div class="table-responsive">
+          <table class="table glass-table align-middle">
+            <thead>
+              <tr>
+                <th>Cover</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Date Purchased</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% (myProducts || []).forEach(p => { %>
                 <tr>
-                  <td>#<%= order.id || 'N/A' %></td>
-                  <td colspan="4">No items</td>
+                  <td>
+                    <img src="<%= p.image || '/images/default-product.jpg' %>" alt="" style="width:64px; height:48px; object-fit:cover; border-radius:8px;">
+                  </td>
+                  <td><strong><%= p.title %></strong></td>
+                  <td>$<strong><%= p.price.toFixed(2) %></strong></td>
+                  <td><strong><%= p.datePurchased %></strong></td>
+                  <td class="text-end">
+                    <a href="/client/products/<%= p.id %>" class="btn btn-sm btn-outline-light">View</a>
+                  </td>
+                </tr>
+              <% }) %>
+              <% if (!myProducts || myProducts.length === 0) { %>
+                <tr>
+                  <td colspan="5" class="text-center" style="color:#fff; font-weight:bold;">You haven’t purchased any products yet.</td>
                 </tr>
               <% } %>
-            <% }) %>
-          </tbody>
-        </table>
-      <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Account Settings -->
+    <section id="settings" class="section">
+      <h1 class="h3 mb-3" style="color:#fff; font-weight:bold;">Settings</h1>
+      <div class="glass p-3">
+        <form action="/client/settings/update" method="POST" class="row g-2">
+          <div class="col-12 col-md-6">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="name" class="form-control" value="<%= user.name %>" required>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" value="<%= user.email %>" required>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current">
+          </div>
+          <div class="col-12 text-end">
+            <button class="btn btn-success">Save Changes</button>
+          </div>
+        </form>
+        <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+        <a href="/auth/logout" class="btn btn-dark w-100">Log Out</a>
+      </div>
     </section>
 
   </main>
+</div>
 
-  <footer>
-    <p>&copy; <%= new Date().getFullYear() %> Beyond 9to5</p>
-  </footer>
-</body>
-</html>
+<%- include('partials/footer') %>
+
+<script>
+  // Sidebar toggle (mobile)
+  const sidebar = document.getElementById('adminSidebar');
+  const toggleBtn = document.getElementById('sidebarToggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const open = sidebar.classList.toggle('open');
+      toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+
+  // Close sidebar when clicking outside (mobile)
+  document.addEventListener('click', (e) => {
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      if (!sidebar.contains(e.target) && !toggleBtn?.contains(e.target)) {
+        sidebar.classList.remove('open');
+        toggleBtn?.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+
+  // Section navigation
+  const links = document.querySelectorAll('.admin-nav .nav-link');
+  const sections = document.querySelectorAll('.section');
+  function showSection(id){
+    sections.forEach(s => s.classList.toggle('active', s.id === id));
+    links.forEach(l => l.classList.toggle('active', l.dataset.section === id));
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      sidebar.classList.remove('open');
+      toggleBtn?.setAttribute('aria-expanded', 'false');
+    }
+    try { localStorage.setItem('client:lastTab', id); } catch(e){}
+  }
+  links.forEach(l => {
+    l.addEventListener('click', (e) => {
+      e.preventDefault();
+      showSection(l.dataset.section);
+    });
+  });
+
+  // Restore last tab
+  (function(){
+    try {
+      const last = localStorage.getItem('client:lastTab');
+      if (last && document.getElementById(last)) showSection(last);
+    } catch(e){}
+  })();
+</script>
