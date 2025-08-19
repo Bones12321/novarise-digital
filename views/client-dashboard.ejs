@@ -1,73 +1,88 @@
-<%- include('partials/header', { title: 'Client Dashboard', user: user, cart: cart }) %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || 'Client Dashboard' %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>Welcome, <%= user.name || 'Client' %>!</h1>
+    <nav>
+      <a href="/dashboard">Dashboard</a> |
+      <a href="/auth/logout">Logout</a>
+    </nav>
+  </header>
 
-<style>
-  html, body {
-    height: 100%;
-    margin: 0;
-  }
+  <main>
+    <!-- PERSONAL DETAILS -->
+    <section>
+      <h2>Your Account Details</h2>
+      <ul>
+        <li><strong>Name:</strong> <%= user.name || 'N/A' %></li>
+        <li><strong>Email:</strong> <%= user.email || 'N/A' %></li>
+        <li><strong>Joined:</strong> <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A' %></li>
+      </ul>
+      <form action="/auth/delete-account" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
+        <button type="submit" style="background-color:red;color:white;padding:8px 16px;border:none;border-radius:4px;cursor:pointer;">
+          Delete Account
+        </button>
+      </form>
+    </section>
 
-  body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: url('/images/logo.png') no-repeat center center fixed;
-    background-size: cover;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-  }
+    <!-- PURCHASE HISTORY -->
+    <section>
+      <h2>Your Purchase History</h2>
+      <% const clientOrders = orders || []; %>
+      <% if (clientOrders.length === 0) { %>
+        <p>You have no purchases yet.</p>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Product</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Download</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% clientOrders.forEach(order => { %>
+              <% if (order.items && order.items.length > 0) { %>
+                <% order.items.forEach(item => { %>
+                  <tr>
+                    <td>#<%= order.id || 'N/A' %></td>
+                    <td><%= item.title || 'Untitled' %></td>
+                    <td><%= order.date ? new Date(order.date).toLocaleDateString() : 'N/A' %></td>
+                    <td><%= order.status || 'Pending' %></td>
+                    <td>
+                      <% if (item.fileUrl) { %>
+                        <a href="<%= item.fileUrl %>" download>Download</a>
+                      <% } else { %>
+                        N/A
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td>#<%= order.id || 'N/A' %></td>
+                  <td colspan="4">No items</td>
+                </tr>
+              <% } %>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
 
-  main {
-    flex: 1; /* This makes main grow and push footer down */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background: rgba(0,0,0,0.5); /* Optional dark overlay for readability */
-  }
+  </main>
 
-  .dashboard-container {
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 40px;
-    max-width: 600px;
-    width: 100%;
-    text-align: center;
-  }
-
-  .dashboard-container h1 {
-    font-weight: 800;
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-  }
-
-  .dashboard-container p {
-    font-size: 1.2rem;
-    margin-bottom: 25px;
-  }
-
-  .btn-logout {
-    display: inline-block;
-    padding: 12px 30px;
-    background-color: #222;
-    color: white;
-    font-weight: 600;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-
-  .btn-logout:hover {
-    background-color: #444;
-  }
-</style>
-
-<main>
-  <div class="dashboard-container">
-    <h1>Welcome, <%= user.name %>!</h1>
-    <p>This is your client dashboard to view orders and your account info.</p>
-    <a href="/auth/logout" class="btn-logout">Logout</a>
-  </div>
-</main>
-
-<%- include('partials/footer') %>
+  <footer>
+    <p>&copy; <%= new Date().getFullYear() %> Beyond 9to5</p>
+  </footer>
+</body>
+</html>
